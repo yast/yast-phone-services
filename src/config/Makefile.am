@@ -6,4 +6,6 @@
 
 config_DATA = $(wildcard *.y2cc)
 
-EXTRA_DIST = $(config_DATA)
+desktop_DATA = $(wildcard *.desktop
+
+EXTRA_DIST = $(config_DATA) $(desktop_DATA)
