@@ -50,7 +50,7 @@ string conf_file = "/etc/capisuite/answering_machine.conf";
  * needed packages
  */
 
-list need_pkgs = [ "capisuite" ];
+list<string> need_pkgs = [ "capisuite" ];
 
 /**
  * Read config settings
@@ -90,22 +90,14 @@ global define boolean Read() ``{
     aconfig_init = aconfig;
 
     /* readin Userdatabase */
-
-    Users::Read (``{ return false;}, false);
+    Users::SetGUI (false);
+    Users::Read ();
     Users::ReadNewSet ("nis");
-    y2debug("UsersCache::usernamelists  %1", UsersCache::usernamelists);  
 
-    foreach ( `key, `l,  UsersCache::usernamelists, ``{
-	if (key != "system") {
-	    foreach (`uname, l, ``{
-		if (!contains(users, uname))
-			users = add(users, uname);
-	    });
-	}
-    });
-
-    y2debug("users=%1", users);
-    users = sort(users);
+    list<string> users = (list<string>) merge (
+	UsersCache::GetUsernames("local"),
+	UsersCache::GetUsernames("nis")
+    );
     y2debug("users=%1", users);
 
     return true;
@@ -132,7 +124,7 @@ global define boolean Write() ``{
 
     /* build a list of deleted entries */
     list deleted = [];
-    foreach(`u, `m, aconfig_init, ``{
+    foreach(string u, `m, aconfig_init, ``{
     	if (aconfig[u]:$[] == $[])
 	    deleted = add(deleted, u);
     });
@@ -150,7 +142,7 @@ global define boolean Write() ``{
     path cf = add(.phone-services.v, conf_file);
     path cfs = add(cf, "GLOBAL");
 
-    foreach(`k, `v, gconfig, ``{
+    foreach(string k, `v, gconfig, ``{
 	path p = add(cfs, k);
 	ret = SCR::Write(p, v);
     });
@@ -158,7 +150,7 @@ global define boolean Write() ``{
     /* remove deleted user sections */
     if (deleted != []) {
 	cf = add(.phone-services.section, conf_file);
-	foreach (`d, deleted, ``{
+	foreach (string d, deleted, ``{
 	    cfs = add(cf, d);
 	    ret = SCR::Write(cfs, nil);
 	});
@@ -166,9 +158,9 @@ global define boolean Write() ``{
 
     /* update the users config */
     cf = add(.phone-services.v, conf_file);
-    foreach(`s, `m, aconfig, ``{
+    foreach(string s, map m, aconfig, ``{
 	cfs = add(cf, s);
-	foreach(`k, `v, m, ``{
+	foreach(string k, `v, m, ``{
 	    path p = add(cfs, k);
 	    ret = SCR::Write(p, v);
 	});
