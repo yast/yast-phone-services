@@ -27,7 +27,7 @@ include "phone-services/answering_machine.ycp";
  * Return a modification status
  * @return true if data was modified
  */
-global define boolean Modified() ``{
+define boolean Modified() ``{
     return Answering_machine::modified;
 }
 

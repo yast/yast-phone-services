@@ -18,12 +18,14 @@ import "Wizard";
 import "Label";
 import "Popup";
 
+define map AM_UserEditDialog(string uname, map uconf);
+
 /**
  * Main answering machine dialog
  * @param standalone true if not run from another ycp client
  * @return dialog result
  */
-global define symbol Answering_machineMainDialog() ``{
+define any Answering_machineMainDialog() ``{
 
     /* dialog caption */
     string caption = _("Answering Machine Configuration");
@@ -88,7 +90,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 
     /* make ui items from config map */
     term item = nil;
-    foreach(`k, `m, userconf, ``{
+    foreach(string k, map m, userconf, ``{
 	item = `item(`id(k),
 	    k,
 	    m["voice_numbers"]:"",
@@ -148,7 +150,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 	}
 	/* edit user settings */
 	else if(ret == `edit) {
-	    string cur = UI::QueryWidget(`id(`table), `CurrentItem);
+	    string cur = (string) UI::QueryWidget(`id(`table), `CurrentItem);
 
 	    y2debug("cur=%1", cur);
 
@@ -183,8 +185,8 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 	/* delete user */
 	else if(ret == `delete) {
 	    items = items - 1;
-	    string cur = UI::QueryWidget(`id(`table), `CurrentItem);
-	    table_items = filter(`e, table_items, ``(cur != select(select(e, 0, []), 0, "")));
+	    string cur = (string) UI::QueryWidget(`id(`table), `CurrentItem);
+	    table_items = filter(term e, table_items, ``(cur != select(select(e, 0, []), 0, "")));
 	    userconf = filter(`k, `v, userconf, ``(k != cur));
 	    new_table = true;
 	}
@@ -201,7 +203,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 	if (new_table) {
 	    items = 0;
 	    table_items = [];
-	    foreach(`k, `m, userconf, ``{
+	    foreach(string k, map m, userconf, ``{
 		item = `item(`id(k),
 		    k,
 		    m["voice_numbers"]:"",
@@ -234,7 +236,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
  * @param uconf map of all userentries
  * @return user settings or nil, if canceled
  */
-global define map AM_UserEditDialog(string uname, map uconf) ``{
+define map AM_UserEditDialog(string uname, map uconf) ``{
 
     map uc = uconf[uname]:$[];
 
@@ -306,7 +308,7 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 	ret = UI::UserInput();
 	if(ret != `ok) break;
 
-	user = UI::QueryWidget(`id(`user), `Value);
+	user = (string) UI::QueryWidget(`id(`user), `Value);
 	if ((user == nil) || (user == "")) {
 	    /* Popup::Error text */
 	    Popup::Error(_("User must be set."));
@@ -315,7 +317,7 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 	}
 	uc = add(uc, "ID", user);
 
-	sval = UI::QueryWidget(`id(`phone), `Value);
+	sval = (string) UI::QueryWidget(`id(`phone), `Value);
         if(sval == nil || sval == "") {
             /* Popup::Error text */
             Popup::Error(_("Phone numbers must not be empty."));
@@ -324,7 +326,7 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
         }
 	uc = add(uc, "voice_numbers", sval);
 
-	sval = UI::QueryWidget(`id(`delay), `Value);
+	sval = (string) UI::QueryWidget(`id(`delay), `Value);
 	if(sval == "") {
 	    /* Popup::Error text */
 	    Popup::Error(_("Delay is invalid."));
@@ -333,11 +335,11 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 	}
 	uc = add(uc, "voice_delay", sval);
 
-	sval = UI::QueryWidget(`id(`duration), `Value);
+	sval = (string) UI::QueryWidget(`id(`duration), `Value);
 	/* Duration "" is OK, default value  */
 	uc = add(uc, "record_length", sval);
 
-	sval = UI::QueryWidget(`id(`action), `Value);
+	sval = (string) UI::QueryWidget(`id(`action), `Value);
 	if(sval == nil || sval == "") {
 	    /* Popup::Error text */
 	    Popup::Error(_("Action is invalid."));
@@ -346,7 +348,7 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 	}
 	uc = add(uc, "voice_action", sval);
 
-	sval = UI::QueryWidget(`id(`pin), `Value);
+	sval = (string) UI::QueryWidget(`id(`pin), `Value);
 	/* Pin "" is OK, no remote control */
 	uc = add(uc, "pin", sval);
 	break;

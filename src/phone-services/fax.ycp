@@ -18,12 +18,14 @@ import "Wizard";
 import "Label";
 import "Popup";
 
+define map Fax_UserEditDialog(string uname, map uconf);
+
 /**
  * Main Fax machine dialog
  * @param standalone true if not run from another ycp client
  * @return dialog result
  */
-global define symbol FaxMainDialog() ``{
+define any FaxMainDialog() ``{
 
     /* dialog caption */
     string caption = _("Fax Machine Configuration");
@@ -101,7 +103,7 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
 
     /* make ui items from config map */
     term item = nil;
-    foreach(`k, `m, userconf, ``{
+    foreach(string k, map m, userconf, ``{
 	item = `item(`id(k),
 	    k,
 	    m["fax_numbers"]:"",
@@ -178,7 +180,7 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
 	}
 	/* edit user settings */
 	else if(ret == `edit) {
-	    string cur = UI::QueryWidget(`id(`table), `CurrentItem);
+	    string cur = (string) UI::QueryWidget(`id(`table), `CurrentItem);
 
 	    y2debug("cur=%1", cur);
 
@@ -213,8 +215,8 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
 	/* delete user */
 	else if(ret == `delete) {
 	    items = items - 1;
-	    string cur = UI::QueryWidget(`id(`table), `CurrentItem);
-	    table_items = filter(`e, table_items, ``(cur != select(select(e, 0, []), 0, "")));
+	    string cur = (string) UI::QueryWidget(`id(`table), `CurrentItem);
+	    table_items = filter(term e, table_items, ``(cur != select(select(e, 0, []), 0, "")));
 	    userconf = filter(`k, `v, userconf, ``(k != cur));
 	    new_table = true;
 	}
@@ -231,7 +233,7 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
 	if (new_table) {
 	    items = 0;
 	    table_items = [];
-	    foreach(`k, `m, userconf, ``{
+	    foreach(string k, map m, userconf, ``{
 		item = `item(`id(k),
 		    k,
 		    m["fax_numbers"]:"",
@@ -251,7 +253,7 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
 
     /* update settings from widgets */
     if(ret == `next) {
-	prefix = UI::QueryWidget(`id(`prefix), `Value);
+	prefix = (string) UI::QueryWidget(`id(`prefix), `Value);
 	if (Fax::gconfig["dial_prefix"]:"" != prefix) {
 		Fax::gconfig = add(Fax::gconfig, "dial_prefix", prefix);
 		Fax::modified = true;
@@ -270,7 +272,7 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
  * @param uconf map of all userentries
  * @return user settings or nil, if canceled
  */
-global define map Fax_UserEditDialog(string uname, map uconf) ``{
+define map Fax_UserEditDialog(string uname, map uconf) ``{
 
     map uc = uconf[uname]:$[];
 
@@ -336,7 +338,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	ret = UI::UserInput();
 	if(ret != `ok) break;
 
-	user = UI::QueryWidget(`id(`user), `Value);
+	user = (string) UI::QueryWidget(`id(`user), `Value);
 	if ((user == nil) || (user == "")) {
 	    /* Popup::Error text */
 	    Popup::Error(_("User must be set."));
@@ -345,8 +347,8 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	}
 	uc = add(uc, "ID", user);
 
-	sval = UI::QueryWidget(`id(`phone), `Value);
-	oval = UI::QueryWidget(`id(`outgoing), `Value);
+	sval = (string) UI::QueryWidget(`id(`phone), `Value);
+	oval = (string) UI::QueryWidget(`id(`outgoing), `Value);
         if((sval == nil || sval == "") && (oval == nil || oval == "")) {
             /* Popup::Error text */
             Popup::Error(_("Fax Numbers and Outgoing MSN must not both be empty"));
@@ -358,7 +360,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	if(oval != nil)
 		uc = add(uc, "outgoing_MSN", oval);
 
-	sval = UI::QueryWidget(`id(`station), `Value);
+	sval = (string) UI::QueryWidget(`id(`station), `Value);
 	if(sval == "") {
 	    /* Popup::Error text */
 	    Popup::Error(_("StationID is invalid."));
@@ -372,7 +374,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	}
 	uc = add(uc, "fax_stationID", sval);
 
-	sval = UI::QueryWidget(`id(`headline), `Value);
+	sval = (string) UI::QueryWidget(`id(`headline), `Value);
 	/* fax_headline "" is OK, default value  */
 	if(50 < size(sval)) {
 	    /* Popup::Error text */
@@ -382,7 +384,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	}
 	uc = add(uc, "fax_headline", sval);
 
-	sval = UI::QueryWidget(`id(`action), `Value);
+	sval = (string) UI::QueryWidget(`id(`action), `Value);
 	if(sval == nil || sval == "") {
 	    /* Popup::Error text */
 	    Popup::Error(_("Action is invalid."));
