@@ -67,7 +67,7 @@ global define boolean Read() ``{
     y2debug("aconfig=%1", aconfig);
 
     aconfig = filter(`k, `v, aconfig, ``{
-	if (k == "global") {
+	if (k == "GLOBAL") {
 	    gconfig = v;
 	    return(false);
 	} else
@@ -135,7 +135,7 @@ global define boolean Write() ``{
 
     /* update the global config */
     path cf = add(.phone-services.v, conf_file);
-    path cfs = add(cf, "global");
+    path cfs = add(cf, "GLOBAL");
 
     foreach(`k, `v, gconfig, ``{
 	path p = add(cfs, k);
