@@ -93,7 +93,8 @@ global define boolean Read() ``{
 
     /* readin Userdatabase */
 
-    Users::Read (nil, false);
+    Users::Read (``{ return false;}, false);
+    Users::ReadNewSet (`nis);
     y2debug("UsersCache::usernamelists  %1", UsersCache::usernamelists);  
 
     foreach ( `key, `l,  UsersCache::usernamelists, ``{
