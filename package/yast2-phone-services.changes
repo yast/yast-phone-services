@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jan  27 14:58:25 CET 2003 - kkeil@suse.de
+
+- add help texts
+- add FAX action
+- Group is now Hardware
+
+-------------------------------------------------------------------
 Mon Jan  20 14:54:45 CET 2003 - kkeil@suse.de
 
 - first version
