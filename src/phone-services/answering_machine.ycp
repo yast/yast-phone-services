@@ -6,7 +6,7 @@
  *
  * $Id$
  *
- * 
+ *
  */
 
 {
@@ -15,9 +15,8 @@ textdomain "phone-services";
 
 import "Answering_machine";
 import "Wizard";
-
-include "ui/common_messages.ycp";
-include "ui/common_popups.ycp";
+import "Label";
+import "Popup";
 
 /**
  * Main answering machine dialog
@@ -73,7 +72,7 @@ to the call.</p>") +
 _("<p><b>Duration</b>: Maximum record length for one call.</p>") +
 
     /* Answering machine help for options 5/6 */
-_("<p><b>Action</b>: By using the default <tt>MailAndSave</tt>, recorded 
+_("<p><b>Action</b>: By using the default <tt>MailAndSave</tt>, recorded
 calls will be sent to the user as mail and saved to disk. To
 disable the mails, set this to <tt>SaveOnly</tt>. <tt>None</tt> will forbid
 recording -- the answering machine will only play the announcement.</p>
@@ -126,7 +125,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
     );
 
     Wizard::SetContentsButtons(caption, contents, help,
-	BackButtonLabel(), FinishButtonLabel());
+	Label::BackButton(), Label::FinishButton());
 
     UI::ChangeWidget(`id(`table), `Items, table_items);
     UI::SetFocus(`id(`table));
@@ -144,7 +143,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 	/* abort? */
 	if(ret == `abort || ret == `cancel) {
 	    /* TODO: handle the changed dialog values */
-	    if(UI::ReallyAbortPopup(Answering_machine::modified)) break;
+	    if(Popup::ReallyAbort(Answering_machine::modified)) break;
 	    else continue;
 	}
 	/* edit user settings */
@@ -283,8 +282,8 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 	),
 	`HSpacing(1),
 	`HBox(
-	    `PushButton(`id(`ok), `opt(`default), OKButtonLabel()),
-	    `PushButton(`id(`cancel), CancelButtonLabel())
+	    `PushButton(`id(`ok), `opt(`default), Label::OKButton()),
+	    `PushButton(`id(`cancel), Label::CancelButton())
 	)
     ));
 
@@ -309,8 +308,8 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 
 	user = UI::QueryWidget(`id(`user), `Value);
 	if ((user == nil) || (user == "")) {
-	    /* ErrorPopup text */
-	    UI::ErrorPopup(_("User must be set."));
+	    /* Popup::Error text */
+	    Popup::Error(_("User must be set."));
 	    UI::SetFocus(`id(`user));
 	    continue;
 	}
@@ -318,8 +317,8 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 
 	sval = UI::QueryWidget(`id(`phone), `Value);
         if(sval == nil || sval == "") {
-            /* ErrorPopup text */
-            UI::ErrorPopup(_("Phone numbers must not be empty."));
+            /* Popup::Error text */
+            Popup::Error(_("Phone numbers must not be empty."));
             UI::SetFocus(`id(`phone));
             continue;
         }
@@ -327,8 +326,8 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 
 	sval = UI::QueryWidget(`id(`delay), `Value);
 	if(sval == "") {
-	    /* ErrorPopup text */
-	    UI::ErrorPopup(_("Delay is invalid."));
+	    /* Popup::Error text */
+	    Popup::Error(_("Delay is invalid."));
 	    UI::SetFocus(`id(`delay));
 	    continue;
 	}
@@ -340,8 +339,8 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 
 	sval = UI::QueryWidget(`id(`action), `Value);
 	if(sval == nil || sval == "") {
-	    /* ErrorPopup text */
-	    UI::ErrorPopup(_("Action is invalid."));
+	    /* Popup::Error text */
+	    Popup::Error(_("Action is invalid."));
 	    UI::SetFocus(`id(`action));
 	    continue;
 	}

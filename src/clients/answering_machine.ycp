@@ -6,7 +6,7 @@
  *
  * $Id$
  *
- * 
+ *
  */
 
 {
@@ -15,8 +15,7 @@ textdomain "phone-services";
 
 import "Answering_machine";
 import "Wizard";
-
-include "ui/common_messages.ycp";
+import "Label";
 
 /* The main () */
 y2milestone("----------------------------------------");
@@ -35,7 +34,7 @@ global define boolean Modified() ``{
 Answering_machine::Read();
 
 Wizard::CreateDialog();
-Wizard::ReplaceNextButton(`PushButton(`id(`next), `opt(`default), FinishButtonLabel()));
+Wizard::ReplaceNextButton(`PushButton(`id(`next), `opt(`default), Label::FinishButton()));
 /* main ui function */
 any ret = Answering_machineMainDialog();
 y2debug("ret == %1", ret);
