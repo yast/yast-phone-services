@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Feb 28 12:01:45 CET 2003 - arvin@suse.de
+
+- new icons
+
+-------------------------------------------------------------------
 Sun Feb 23 18:13:47 CET 2003 - kkeil@suse.de
 
 - fix user selection list to display NIS users too (#23961)
@@ -39,7 +44,7 @@ Fri Jan 31 14:05:02 CET 2003 - ghillie@suse.de
 -------------------------------------------------------------------
 Wed Jan 29 16:22:07 CET 2003 - ghillie@suse.de
 
-- [global] section was renamed to [GLOBAL] 
+- [global] section was renamed to [GLOBAL]
 
 -------------------------------------------------------------------
 Mon Jan  27 16:38:28 CET 2003 - kkeil@suse.de
