@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Feb 10 11:06:36 CET 2004 - msvec@suse.cz
+
+- dropped y2cc config files
+- 2.9.0
+
+-------------------------------------------------------------------
 Sun Sep 14 20:50:46 CEST 2003 - adrian@suse.de
 
 - make it working in kcontrol

@@ -23,8 +23,7 @@ Summary:	Phone services configuration (answering machine and FAX)
 %dir @yncludedir@/phone-services
 @yncludedir@/phone-services/*
 @clientdir@/*.ycp
-@moduledir@/*.ycp
-@configdir@/*.y2cc
+@moduledir@/*.y*
 @desktopdir@/*.desktop
 @scrconfdir@/*.scr
 %doc @docdir@

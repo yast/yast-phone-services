@@ -65,8 +65,8 @@ global define boolean Read() ``{
     if(SCR::Read(.target.size, conf_file) > 0) {
 	aconfig = listmap(string s, SCR::Dir(cf), ``{
 	    path pp = add(add(.phone-services.v, conf_file), s);
-	    return [ s, listmap(string vs, SCR::Dir(pp), ``{
-		return [ vs, SCR::Read(add(pp, vs)) ];
+	    return $[ s : listmap(string vs, SCR::Dir(pp), ``{
+		return $[ vs : SCR::Read(add(pp, vs)) ];
 	    }) ];
 	});
     }
@@ -74,7 +74,7 @@ global define boolean Read() ``{
 
     users = [];
 
-    aconfig = filter(`k, `v, aconfig, ``{
+    aconfig = filter(string k, map v, aconfig, ``{
 	if (k == "GLOBAL") {
 	    gconfig = v;
 	    return(false);
