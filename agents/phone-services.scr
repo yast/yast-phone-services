@@ -1,0 +1,39 @@
+/**
+ * File:	phone-services.scr
+ * Summary:	Agent for answer machine config file
+ * Authors:	Karsten Keil
+ * Access:	read/write
+ *
+ * General syntax:
+ *	# comment
+ *	[section/user name]
+ *	# comment
+ *	key=value
+ *
+ * $Id$
+ *
+ * <p>Reads and writes /etc/capisuit/*.conf.</p>
+ */
+.phone-services
+
+`ag_ini(
+    IniAgent( [ "/etc/capisuite/answering_machine.conf", "/etc/capisuite/fax.conf" ],
+	$[
+	    "options"	: [ ],
+	    /* empty lines and whole-line comments */
+	    "comments"	: [ "^[ \t]*$", "^[ \t]*#.*" ],
+	    /* matching rules for sections */
+	    "sections"	: [
+		$[
+		    "begin" : [ "[ \t]*\\[[ \t]*(.*[^ \t])[ \t]*\\][ \t]*", "[%s]" ],
+		],
+	    ],
+	    /* matching rules for values */
+	    "params" : [
+		$[
+		    "match" : [ "^[ \t]*([^=]*[^ \t=])[ \t]*=[ \t]*\"([^\"]*)\"[ \t]*$" , "%s=\"%s\""],
+		],
+	    ],
+	]
+    )
+)

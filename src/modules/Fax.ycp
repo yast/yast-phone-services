@@ -1,0 +1,173 @@
+/**
+ * File:	modules/Fax.ycp
+ * Package:	Communication
+ * Summary:     Configuration of a ISDN Fax machine
+ * Authors:	Karsten Keil <kkeil@suse.de>
+ *
+ * $Id$
+ *
+ * 
+ */
+
+{
+
+module "Fax";
+textdomain "phone-services";
+
+import "UserDefs";
+import "UserSettings";
+
+/**
+ * All Fax machine configured user data
+ */
+global map aconfig = $[];
+
+/**
+ * All Fax machine global settings
+ */
+global map gconfig = $[];
+
+/**
+ * Data was modified?
+ */
+global boolean modified = false;
+
+/**
+ * List of available users
+ */
+global list users = [];
+
+/**
+ * All configurations read at the start
+ */
+map aconfig_init = $[];
+map gconfig_init = $[];
+
+/**
+ * config file location
+ */
+string conf_file = "/etc/capisuite/fax.conf";
+
+/**
+ * Read config settings
+ * @return true if success
+ */
+global define boolean Read() ``{
+
+    /* read config */
+    path cf  = add(.phone-services.section, conf_file);
+    if(SCR::Read(.target.size, conf_file) > 0) {
+	aconfig = listmap(string s, SCR::Dir(cf), ``{
+	    path pp = add(add(.phone-services.v, conf_file), s);
+	    return [ s, listmap(string vs, SCR::Dir(pp), ``{
+		return [ vs, SCR::Read(add(pp, vs)) ];
+	    }) ];
+	});
+    }
+    y2debug("aconfig=%1", aconfig);
+
+    aconfig = filter(`k, `v, aconfig, ``{
+	if (k == "global") {
+	    gconfig = v;
+	    return(false);
+	} else
+	    return(true);
+    });
+
+    y2debug("aconfig=%1", aconfig);
+    y2debug("gconfig=%1", gconfig);
+
+    /* save values to check for changes later */
+    gconfig_init = gconfig;
+    aconfig_init = aconfig;
+
+    /* readin Userdatabase */
+    users = [];
+    UserSettings::ReadSettingsFromDisk(false);
+
+    // TODO: use UserSettings::UsersRead(`usernamelist, false) if the filter
+    // work at the moment you get allway all users
+    foreach ( `key, `user,  UserSettings::current_users, ``{
+	if (user["todo"]:"" != `delete ) {
+	    if (key >=  UserDefs::max_system_uid  && user["username"]:"" != "nobody" ) {
+		users = add(users, user["username"]:"");
+	    }
+	}
+    });
+
+    y2debug("users=%1", users);
+    users = sort(users);
+    y2debug("users=%1", users);
+
+    return true;
+}
+
+/**
+ * Write fax settings and apply changes
+ * @return true if success
+ */
+global define boolean Write() ``{
+
+    if(!modified) return true;
+    y2milestone("Writing configuration");
+
+    /* Check if there is anything to do */
+    if((aconfig_init == aconfig) && (gconfig_init == gconfig)) {
+	y2debug("config not modified");
+	return true;
+    }
+
+    /* build a list of deleted entries */
+    list deleted = [];
+    foreach(`u, `m, aconfig_init, ``{
+    	if (aconfig[u]:$[] == $[])
+	    deleted = add(deleted, u);
+    });
+    y2debug("deleted %1", deleted);
+
+    /* create if not exists, otherwise backup */
+    if(SCR::Read(.target.size, conf_file) < 0)
+	SCR::Write(.target.string, conf_file, "");
+    else
+	SCR::Execute(.target.bash, "/bin/cp "+conf_file+" "+conf_file+".YaST2save");
+
+    any ret = false;
+
+    /* update the global config */
+    path cf = add(.phone-services.v, conf_file);
+    path cfs = add(cf, "global");
+
+    foreach(`k, `v, gconfig, ``{
+	path p = add(cfs, k);
+	ret = SCR::Write(p, v);
+    });
+
+    /* remove deleted user sections */
+    if (deleted != []) {
+	cf = add(.phone-services.section, conf_file);
+	foreach (`d, deleted, ``{
+	    cfs = add(cf, d);
+	    ret = SCR::Write(cfs, nil);
+	});
+    }
+
+    /* update the users config */
+    cf = add(.phone-services.v, conf_file);
+    foreach(`s, `m, aconfig, ``{
+	cfs = add(cf, s);
+	foreach(`k, `v, m, ``{
+	    path p = add(cfs, k);
+	    ret = SCR::Write(p, v);
+	});
+    });
+    cf = add(.phone-services.section, conf_file);
+    cfs = add(cf, "xxxx");
+    
+    ret = SCR::Write(cfs, nil);
+    y2debug("write %1 ret %2",cfs, ret);
+    modified = false;
+    return ret == true;
+}
+
+/* EOF */
+}

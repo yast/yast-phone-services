@@ -1,0 +1,35 @@
+@HEADER-COMMENT@
+
+# neededforbuild  yast2-devel-packages
+
+@HEADER@
+Requires:       yast2
+Provides:	yast2-config-phone-services
+Obsoletes:	yast2-config-phone-services
+Provides:	yast2-trans-phone-services
+Obsoletes:	yast2-trans-phone-services
+BuildArchitectures:     noarch
+Summary:	Configuration of phone services eg. answering machine and FAX
+
+%description
+-
+
+@PREP@
+
+@BUILD@
+
+@INSTALL@
+
+@CLEAN@
+
+%files
+%defattr(-,root,root)
+%dir @yncludedir@/phone-services
+@yncludedir@/phone-services/*
+@clientdir@/*.ycp
+@imagedir@/*.png
+@moduledir@/*.ycp
+@configdir@/*.y2cc
+@scrconfdir@/*.scr
+%doc @docdir@
+

@@ -1,0 +1,330 @@
+/**
+ * File:	include/phone-services/answering_machine.ycp
+ * Package:	Communication
+ * Summary:     phone answering machine dialogs
+ * Authors:	Karsten Keil <kkeil@suse.de>
+ *
+ * $Id$
+ *
+ * 
+ */
+
+{
+
+textdomain "phone-services";
+
+import "Answering_machine";
+import "Wizard";
+
+include "ui/common_messages.ycp";
+include "ui/common_popups.ycp";
+
+/**
+ * Main answering machine dialog
+ * @param standalone true if not run from another ycp client
+ * @return dialog result
+ */
+global define symbol Answering_machineMainDialog() ``{
+
+    /* dialog caption */
+    string caption = _("Answering machine configuration");
+
+    /* some variables */
+
+    term theader = `header(
+	/* Table header 1/5 */
+	_("User"),
+	/* Table header 2/5 */
+	_("Phonenumbers"),
+	/* Table header 3/5 */
+	_("Delay"),
+	/* Table header 4/5 */
+	_("Duration"),
+	/* Table header 4/5 */
+	_("Action")
+    );
+
+    /* Answering machine dialog help 1/2 */
+    string help = _("<p>A answering machine for one or more users can be 
+set up in this dialog.</p>") +
+
+    /* Answering machine  help 2/2 */
+_("<p>...</p>");
+
+    integer max = 0;
+    integer items = 0;
+    list table_items = [];
+    map userconf = Answering_machine::aconfig;
+
+    /* make ui items from config map */
+    term item = nil;
+    foreach(`k, `m, userconf, ``{
+	item = `item(`id(k),
+	    k,
+	    m["voice_numbers"]:"",
+	    m["voice_delay"]:"",
+	    m["record_length"]:"",
+	    m["voice_action"]:"");
+	change(table_items, item);
+	items = items + 1;
+    });
+
+    y2debug("table_items=%1", table_items);
+    y2debug("items=%1", items);
+    y2debug("userconf=%1", userconf);
+    max = items;
+
+    list devs = Answering_machine::GetDevices();
+    y2debug("devs=%1", devs);
+
+    /* main dialog contents */
+    term contents = `HBox(
+	`HSpacing(5),
+	`VBox(
+	    `VStretch(),
+	    `VSpacing(1),
+	    `Frame(_("&User table"), `VBox(
+		`Table(`id(`table), theader, []),
+		/* PushButton label */
+		`HBox(`PushButton(`id(`add), _("Ad&d")),
+		/* PushButton label */
+		`PushButton(`id(`edit), `opt(`disabled), _("&Edit")),
+		/* PushButton label */
+		`PushButton(`id(`delete), `opt(`disabled), _("De&lete"))))),
+	    `VSpacing(1),
+	    `VStretch()
+	),
+	`HSpacing(5)
+    );
+
+    Wizard::SetContentsButtons(caption, contents, help,
+	BackButtonLabel(), FinishButtonLabel());
+
+    UI::ChangeWidget(`id(`table), `Items, table_items);
+    UI::SetFocus(`id(`table));
+
+    any ret = nil;
+    while(true) {
+	boolean new_table = false;
+	map cur_item = $[];
+
+	UI::ChangeWidget(`id(`edit), `Enabled, (items > 0));
+	UI::ChangeWidget(`id(`delete), `Enabled, (items > 0));
+
+	ret = UI::UserInput();
+
+	/* abort? */
+	if(ret == `abort || ret == `cancel) {
+	    /* TODO: handle the changed dialog values */
+	    if(UI::ReallyAbortPopup(Answering_machine::modified)) break;
+	    else continue;
+	}
+	/* edit user settings */
+	else if(ret == `edit) {
+	    string cur = UI::QueryWidget(`id(`table), `CurrentItem);
+
+	    y2debug("cur=%1", cur);
+
+	    cur_item = AM_UserEditDialog(cur, userconf);
+	    y2debug("cur_item=%1", cur_item);
+	    if(cur_item == nil)
+		continue;
+	    else {
+		cur = cur_item["ID"]:"";
+		if (cur == "")
+		    continue;
+		cur_item = filter(`k, `v, cur_item, ``(k != "ID"));
+		new_table = true;
+		userconf = add(userconf, cur, cur_item);
+		y2debug("userconf=%1", userconf);
+	    }
+	}
+	/* add user */
+	else if(ret == `add) {
+	    cur_item = AM_UserEditDialog("", userconf);
+	    if(cur_item == nil)
+		continue;
+	    else {
+		string cur = cur_item["ID"]:"";
+		if (cur == "")
+		    continue;
+		cur_item = filter(`k, `v, cur_item, ``(k != "ID"));
+		new_table = true;
+		userconf = add(userconf, cur, cur_item);
+	    }
+	}
+	/* delete user */
+	else if(ret == `delete) {
+	    items = items - 1;
+	    string cur = UI::QueryWidget(`id(`table), `CurrentItem);
+	    table_items = filter(`e, table_items, ``(cur != select(select(e, 0, []), 0, "")));
+	    userconf = filter(`k, `v, userconf, ``(k != cur));
+	    new_table = true;
+	}
+	else if(ret == `back) {
+	    break;
+	}
+	else if(ret == `next) {
+	    break;
+	}
+	else {
+	    y2debug("Unexpected retcode: %1", ret);
+	    continue;
+	}
+	if (new_table) {
+	    items = 0;
+	    table_items = [];
+	    foreach(`k, `m, userconf, ``{
+		item = `item(`id(k),
+		    k,
+		    m["voice_numbers"]:"",
+		    m["voice_delay"]:"",
+		    m["record_length"]:"",
+		    m["voice_action"]:"");
+		change(table_items, item);
+		items = items + 1;
+	    });
+	    max = items;
+	    UI::ChangeWidget(`id(`table), `Items, table_items);
+	    UI::ChangeWidget(`id(`table), `CurrentItem, max);
+	    Answering_machine::modified = true;
+	}
+    };
+
+    /* update settings from widgets */
+    if(ret == `next) {
+	if (Answering_machine::aconfig != userconf) {
+	    Answering_machine::aconfig = userconf;
+	    Answering_machine::modified = true;
+	}
+    }
+    return ret;
+}
+
+/**
+ * Answering machine user edit dialog
+ * @param uname name of the edited user settings
+ * @param uconf map of all userentries
+ * @return user settings or nil, if canceled
+ */
+global define map AM_UserEditDialog(string uname, map uconf) ``{
+
+    map uc = uconf[uname]:$[];
+
+    if (uc == $[]) {
+	/* set globals as defaults */
+	uc["voice_delay"] = Answering_machine::gconfig["voice_delay"]:"10";
+	uc["record_length"] = Answering_machine::gconfig["record_length"]:"30";
+	uc["voice_action"] = Answering_machine::gconfig["voice_action"]:"mail";
+    }
+
+    /* values for delay */
+    list delay_val = [ "", "0", "5", "10", "15", "20", "30", "40", "50", "60", "90", "120" ];
+    if (!contains(delay_val, uc["voice_delay"]:""))
+	delay_val = add(delay_val, uc["voice_delay"]:"");
+    
+    /* values for record_length */
+    list rlength_val = [ "", "0", "10", "20", "30", "45", "60", "90", "120", "150", "180", "240", "300" ];
+    if (!contains(rlength_val, uc["record_length"]:""))
+	rlength_val = add(rlength_val, uc["record_length"]:"");
+
+    /* add at least the user */
+    if (uname != "" && !contains(Answering_machine::users, uname)) {
+	Answering_machine::users = add(Answering_machine::users, uname);
+	Answering_machine::users = sort(Answering_machine::users);
+    }
+
+    y2debug("uc=%1", uc);
+    list actions = [ "none", "mail", "saveonly" ];
+
+    UI::OpenDialog(`opt(`decorated),`VBox(
+	`HSpacing(1),
+	`VBox(
+	    /* ComboBox label */
+	    `ComboBox(`id(`user), `opt(`editable, `hstretch), _("&User"), Answering_machine::users),
+	    /* TextEntry label */
+	    `TextEntry(`id(`phone), _("&Phonenumbers"), uc["voice_numbers"]:""),
+	    /* ComboBox label */
+	    `ComboBox(`id(`delay), `opt(`editable, `hstretch), _("&Delay"), delay_val),
+	    /* ComboBox label */
+	    `ComboBox(`id(`duration), `opt(`editable, `hstretch), _("D&uration"), rlength_val),
+	    /* ComboBox label */
+	    `ComboBox(`id(`action), `opt(`editable, `hstretch), _("&Action"), actions),
+	    /* TextEntry label */
+	    `TextEntry(`id(`pin), _("P&in"), uc["pin"]:"")
+	),
+	`HSpacing(1),
+	`HBox(
+	    `PushButton(`id(`ok), `opt(`default), OKButtonLabel()),
+	    `PushButton(`id(`cancel), CancelButtonLabel())
+	)
+    ));
+
+    if(uname != "")
+	UI::ChangeWidget(`id(`user), `Value, uname);
+    UI::ChangeWidget(`id(`delay), `Value, uc["voice_delay"]:"10");
+    UI::ChangeWidget(`id(`duration), `Value, uc["record_length"]:"30");
+    UI::ChangeWidget(`id(`action), `Value, uc["voice_action"]:"mail");
+    UI::ChangeWidget(`id(`phone), `ValidChars, "0123456789#*,");
+    UI::ChangeWidget(`id(`delay), `ValidChars, "0123456789");
+    UI::ChangeWidget(`id(`duration), `ValidChars, "0123456789");
+    UI::ChangeWidget(`id(`pin), `ValidChars, "0123456789");
+    UI::SetFocus(`id(`user));
+
+    any ret = nil;
+    string user = "";
+    string sval = "";
+
+    while(true) {
+	ret = UI::UserInput();
+	if(ret != `ok) break;
+
+	user = UI::QueryWidget(`id(`user), `Value);
+	if ((user == nil) || (user == "")) {
+	    /* ErrorPopup text */
+	    UI::ErrorPopup(_("User must be set"));
+	    UI::SetFocus(`id(`user));
+	    continue;
+	}
+	uc = add(uc, "ID", user);
+
+	sval = UI::QueryWidget(`id(`phone), `Value);
+	/* voice_numbers "" is OK, all calls acepted */
+
+	uc = add(uc, "voice_numbers", sval);
+
+	sval = UI::QueryWidget(`id(`delay), `Value);
+	if(sval == "") {
+	    /* ErrorPopup text */
+	    UI::ErrorPopup(_("Delay is incorrect"));
+	    UI::SetFocus(`id(`delay));
+	    continue;
+	}
+	uc = add(uc, "voice_delay", sval);
+
+	sval = UI::QueryWidget(`id(`duration), `Value);
+	/* Duration "" is OK, default value  */
+	uc = add(uc, "record_length", sval);
+
+	sval = UI::QueryWidget(`id(`action), `Value);
+	if(sval == nil || sval == "") {
+	    /* ErrorPopup text */
+	    UI::ErrorPopup(_("Action is incorrect"));
+	    UI::SetFocus(`id(`action));
+	    continue;
+	}
+	uc = add(uc, "voice_action", sval);
+
+	sval = UI::QueryWidget(`id(`pin), `Value);
+	/* Pin "" is OK, no remote control */
+	uc = add(uc, "pin", sval);
+	break;
+    }
+    y2debug("ret=%1", ret);
+    UI::CloseDialog();
+    if(ret != `ok) return nil;
+    return uc;
+}
+
+/* EOF */
+}

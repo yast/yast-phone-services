@@ -1,0 +1,55 @@
+/**
+ * File:	clients/answering_machine.ycp
+ * Package:	phone-services
+ * Summary:     Configuration of a phone answering machine
+ * Authors:	Karsten Keil <kkeil@suse.de>
+ *
+ * $Id$
+ *
+ * 
+ */
+
+{
+
+textdomain "phone-services";
+
+import "Answering_machine";
+import "Wizard";
+
+include "ui/common_messages.ycp";
+
+/* The main () */
+y2milestone("----------------------------------------");
+y2milestone("answering_machine module started");
+
+include "phone-services/answering_machine.ycp";
+
+/**
+ * Return a modification status
+ * @return true if data was modified
+ */
+global define boolean Modified() ``{
+    return Answering_machine::modified;
+}
+
+Answering_machine::Read();
+
+Wizard::CreateDialog();
+Wizard::ReplaceNextButton(`PushButton(`id(`next), `opt(`default), FinishButtonLabel()));
+/* main ui function */
+any ret = Answering_machineMainDialog();
+y2debug("ret == %1", ret);
+
+if(ret == `next && Answering_machine::modified) {
+    Answering_machine::Write();
+}
+
+UI::CloseDialog();
+
+/* Finish */
+y2milestone( "Returning with %1", ret );
+y2milestone("----------------------------------------");
+return ret;
+
+/* EOF */
+}

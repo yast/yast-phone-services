@@ -1,0 +1,55 @@
+/**
+ * File:	clients/fax.ycp
+ * Package:	phone-services
+ * Summary:     Configuration of a FAX machine
+ * Authors:	Karsten Keil <kkeil@suse.de>
+ *
+ * $Id$
+ *
+ * 
+ */
+
+{
+
+textdomain "phone-services";
+
+import "Fax";
+import "Wizard";
+
+include "ui/common_messages.ycp";
+
+/* The main () */
+y2milestone("----------------------------------------");
+y2milestone("fax module started");
+
+include "phone-services/fax.ycp";
+
+/**
+ * Return a modification status
+ * @return true if data was modified
+ */
+global define boolean Modified() ``{
+    return Fax::modified;
+}
+
+Fax::Read();
+
+Wizard::CreateDialog();
+Wizard::ReplaceNextButton(`PushButton(`id(`next), `opt(`default), FinishButtonLabel()));
+/* main ui function */
+any ret = FaxMainDialog();
+y2debug("ret == %1", ret);
+
+if(ret == `next && Fax::modified) {
+    Fax::Write();
+}
+
+UI::CloseDialog();
+
+/* Finish */
+y2milestone( "Returning with %1", ret );
+y2milestone("----------------------------------------");
+return ret;
+
+/* EOF */
+}
