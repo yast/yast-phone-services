@@ -180,6 +180,15 @@ global define boolean Write() ``{
 	/* start capisuite */
 	if (SCR::Read(.target.size, "/etc/init.d/capisuite") > 0)
 		SCR::Execute(.target.bash, "/etc/init.d/capisuite start");
+
+	/* create a system wide kdeprintfaxrc if KDE is installed and no config exist */
+	string command = 
+	    "if [ -e /opt/kde3/share/config -a ! -e /opt/kde3/share/config/kdeprintfaxrc ]; then " +
+		"echo \"[System]\" > /opt/kde3/share/config/kdeprintfaxrc; " +
+		"echo \"HylaFax=/usr/bin/capisuitefax -d %number %files\" >> /opt/kde3/share/config/kdeprintfaxrc; " +
+		"echo \"System=hylafax\" >> /opt/kde3/share/config/kdeprintfaxrc; " +
+	    "fi";
+	SCR::Execute(.target.bash, command);
     }
     return ret == true;
 }

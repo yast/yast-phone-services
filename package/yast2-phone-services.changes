@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Feb 11 13:46:16 CET 2003 - kkeil@suse.de
+
+- create a kdeprintfax config if KDE was installed and no config
+  exist
+- 2.7.3
+
+-------------------------------------------------------------------
 Mon Feb 10 18:24:00 CET 2003 - kkeil@suse.de
 
 - user selection list work again
