@@ -90,7 +90,7 @@ map cmdline = $[
 	"summary" :$[
 	    "handler"	: Answering_machineSummaryHandler,
 	    // command line help text for 'summary' action
-	    "help"	: _("Answering_machine configuration summary."),
+	    "help"	: _("Answering machine configuration summary."),
 	],
     ],
 ];
