@@ -35,7 +35,7 @@ Fax::Read();
 
 Wizard::CreateDialog();
 Wizard::SetDesktopIcon("fax");
-Wizard::ReplaceNextButton(`PushButton(`id(`next), `opt(`default), Label::FinishButton()));
+Wizard::SetNextButton(`next, Label::FinishButton() );
 
 /* main ui function */
 any ret = FaxMainDialog();

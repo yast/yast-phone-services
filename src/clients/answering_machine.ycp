@@ -35,7 +35,7 @@ Answering_machine::Read();
 
 Wizard::CreateDialog();
 Wizard::SetDesktopIcon("answering_machine");
-Wizard::ReplaceNextButton(`PushButton(`id(`next), `opt(`default), Label::FinishButton()));
+Wizard::SetNextButton(`next, Label::FinishButton() );
 
 /* main ui function */
 any ret = Answering_machineMainDialog();
