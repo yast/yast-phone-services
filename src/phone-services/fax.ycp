@@ -27,7 +27,7 @@ include "ui/common_popups.ycp";
 global define symbol FaxMainDialog() ``{
 
     /* dialog caption */
-    string caption = _("Fax machine configuration");
+    string caption = _("Fax Machine Configuration");
 
     /* some variables */
 
@@ -35,7 +35,7 @@ global define symbol FaxMainDialog() ``{
 	/* Table header 1/5 */
 	_("User"),
 	/* Table header 2/5 */
-	_("Faxnumbers"),
+	_("Fax Numbers"),
 	/* Table header 3/5 */
 	_("StationID"),
 	/* Table header 4/5 */
@@ -107,7 +107,7 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>");
 	`VBox(
 	    `VStretch(),
 	    `VSpacing(1),
-	    `Frame(_("&User table"), `VBox(
+	    `Frame(_("&User Table"), `VBox(
 		`Table(`id(`table), theader, []),
 		/* PushButton label */
 		`HBox(`PushButton(`id(`add), _("Ad&d")),
@@ -256,7 +256,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	    /* ComboBox label */
 	    `ComboBox(`id(`user), `opt(`editable, `hstretch), _("&User"), Fax::users),
 	    /* TextEntry label */
-	    `TextEntry(`id(`phone), _("&Faxnumbers"), uc["fax_numbers"]:""),
+	    `TextEntry(`id(`phone), _("&Fax Numbers"), uc["fax_numbers"]:""),
 	    /* TextEntry label */
 	    `TextEntry(`id(`station), _("&StationID"), uc["fax_stationID"]:""),
 	    /* TextEntry label */
@@ -289,7 +289,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	user = UI::QueryWidget(`id(`user), `Value);
 	if ((user == nil) || (user == "")) {
 	    /* ErrorPopup text */
-	    UI::ErrorPopup(_("User must be set"));
+	    UI::ErrorPopup(_("User must be set."));
 	    UI::SetFocus(`id(`user));
 	    continue;
 	}
@@ -307,12 +307,12 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	sval = UI::QueryWidget(`id(`station), `Value);
 	if(sval == "") {
 	    /* ErrorPopup text */
-	    UI::ErrorPopup(_("StationID is incorrect"));
+	    UI::ErrorPopup(_("StationID is invalid."));
 	    UI::SetFocus(`id(`station));
 	    continue;
 	} else if(20 < size(sval)) {
 	    /* ErrorPopup text */
-	    UI::ErrorPopup(_("StationID maximum length is 20"));
+	    UI::ErrorPopup(_("The maximum length for a StationID is twenty."));
 	    UI::SetFocus(`id(`station));
 	    continue;
 	}
@@ -322,7 +322,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	/* fax_headline "" is OK, default value  */
 	if(50 < size(sval)) {
 	    /* ErrorPopup text */
-	    UI::ErrorPopup(_("Headline maximum length is 50"));
+	    UI::ErrorPopup(_("The maximum length for a headline is fifty."));
 	    UI::SetFocus(`id(`headline));
 	    continue;
 	}
@@ -331,7 +331,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	sval = UI::QueryWidget(`id(`action), `Value);
 	if(sval == nil || sval == "") {
 	    /* ErrorPopup text */
-	    UI::ErrorPopup(_("Action is incorrect"));
+	    UI::ErrorPopup(_("Action is invalid."));
 	    UI::SetFocus(`id(`action));
 	    continue;
 	}

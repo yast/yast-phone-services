@@ -21,7 +21,7 @@ Group = Network
 Icon = FaxRecieving.png
 
 ; // *one* *short* descriptive line for y2cc
-Helptext = _("Setup ISDN fax device")
+Helptext = _("Set up ISDN fax device")
 
 ; arguments, seperated by space
 Arguments =

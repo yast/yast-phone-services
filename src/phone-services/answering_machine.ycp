@@ -27,7 +27,7 @@ include "ui/common_popups.ycp";
 global define symbol Answering_machineMainDialog() ``{
 
     /* dialog caption */
-    string caption = _("Answering machine configuration");
+    string caption = _("Answering Machine Configuration");
 
     /* some variables */
 
@@ -35,7 +35,7 @@ global define symbol Answering_machineMainDialog() ``{
 	/* Table header 1/5 */
 	_("User"),
 	/* Table header 2/5 */
-	_("Phonenumbers"),
+	_("Phone Numbers"),
 	/* Table header 3/5 */
 	_("Delay"),
 	/* Table header 4/5 */
@@ -108,7 +108,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 	`VBox(
 	    `VStretch(),
 	    `VSpacing(1),
-	    `Frame(_("&User table"), `VBox(
+	    `Frame(_("&User Table"), `VBox(
 		`Table(`id(`table), theader, []),
 		/* PushButton label */
 		`HBox(`PushButton(`id(`add), _("Ad&d")),
@@ -268,7 +268,7 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 	    /* ComboBox label */
 	    `ComboBox(`id(`user), `opt(`editable, `hstretch), _("&User"), Answering_machine::users),
 	    /* TextEntry label */
-	    `TextEntry(`id(`phone), _("&Phonenumbers"), uc["voice_numbers"]:""),
+	    `TextEntry(`id(`phone), _("&Phone Numbers"), uc["voice_numbers"]:""),
 	    /* ComboBox label */
 	    `ComboBox(`id(`delay), `opt(`editable, `hstretch), _("&Delay"), delay_val),
 	    /* ComboBox label */
@@ -307,7 +307,7 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 	user = UI::QueryWidget(`id(`user), `Value);
 	if ((user == nil) || (user == "")) {
 	    /* ErrorPopup text */
-	    UI::ErrorPopup(_("User must be set"));
+	    UI::ErrorPopup(_("User must be set."));
 	    UI::SetFocus(`id(`user));
 	    continue;
 	}
@@ -325,7 +325,7 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 	sval = UI::QueryWidget(`id(`delay), `Value);
 	if(sval == "") {
 	    /* ErrorPopup text */
-	    UI::ErrorPopup(_("Delay is incorrect"));
+	    UI::ErrorPopup(_("Delay is invalid."));
 	    UI::SetFocus(`id(`delay));
 	    continue;
 	}
@@ -338,7 +338,7 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 	sval = UI::QueryWidget(`id(`action), `Value);
 	if(sval == nil || sval == "") {
 	    /* ErrorPopup text */
-	    UI::ErrorPopup(_("Action is incorrect"));
+	    UI::ErrorPopup(_("Action is invalid."));
 	    UI::SetFocus(`id(`action));
 	    continue;
 	}
