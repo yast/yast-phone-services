@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jan 29 16:22:07 CET 2003 - ghillie@suse.de
+
+- [global] section was renamed to [GLOBAL] 
+
+-------------------------------------------------------------------
 Mon Jan  27 16:38:28 CET 2003 - kkeil@suse.de
 
 - final decision group Network
