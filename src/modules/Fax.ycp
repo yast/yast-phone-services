@@ -14,8 +14,8 @@
 module "Fax";
 textdomain "phone-services";
 
-import "UserDefs";
-import "UserSettings";
+import "Users";
+import "UsersCache";
 
 /**
  * All Fax machine configured user data
@@ -52,7 +52,7 @@ string conf_file = "/etc/capisuite/fax.conf";
  * needed packages
  */
 
-list need_pkgs = [ "capisuite", "sfftobmp" ];
+list need_pkgs = [ "capisuite" ];
 
 /**
  * Read config settings
@@ -72,12 +72,16 @@ global define boolean Read() ``{
     }
     y2debug("aconfig=%1", aconfig);
 
+    users = [];
+
     aconfig = filter(`k, `v, aconfig, ``{
 	if (k == "GLOBAL") {
 	    gconfig = v;
 	    return(false);
-	} else
+	} else {
+	    users = add(users, k);
 	    return(true);
+	}
     });
 
     y2debug("aconfig=%1", aconfig);
@@ -88,16 +92,16 @@ global define boolean Read() ``{
     aconfig_init = aconfig;
 
     /* readin Userdatabase */
-    users = [];
-    UserSettings::ReadSettingsFromDisk(false);
 
-    // TODO: use UserSettings::UsersRead(`usernamelist, false) if the filter
-    // work at the moment you get allway all users
-    foreach ( `key, `user,  UserSettings::current_users, ``{
-	if (user["todo"]:"" != `delete ) {
-	    if (key >=  UserDefs::max_system_uid  && user["username"]:"" != "nobody" ) {
-		users = add(users, user["username"]:"");
-	    }
+    Users::Read (nil, false);
+    y2debug("UsersCache::usernamelists  %1", UsersCache::usernamelists);  
+
+    foreach ( `key, `l,  UsersCache::usernamelists, ``{
+	if (key != `system) {
+	    foreach (`uname, l, ``{
+		if (!contains(users, uname))
+			users = add(users, uname);
+	    });
 	}
     });
 
