@@ -32,22 +32,50 @@ global define symbol FaxMainDialog() ``{
     /* some variables */
 
     term theader = `header(
-	/* Table header 1/4 */
+	/* Table header 1/5 */
 	_("User"),
-	/* Table header 2/4 */
+	/* Table header 2/5 */
 	_("Faxnumbers"),
-	/* Table header 3/4 */
+	/* Table header 3/5 */
 	_("StationID"),
-	/* Table header 4/4 */
-	_("Headline")
+	/* Table header 4/5 */
+	_("Headline"),
+	/* Table header 5/5 */
+	_("Action")
     );
 
-    /* Fax dialog help 1/2 */
-    string help = _("<p>A Fax receiver for one or more users can be 
-set up in this dialog.</p>") +
+    /* Fax dialog general help 1/2 */
+    string help = _("<p>The fax system for one or more users can be
+set up in this dialog. Each user must have at least one own unique fax
+number configured. Please refer to the telecommunication chapter in the
+manuals for further details.</p>") +
 
-    /* Fax help 2/2 */
-_("<p>...</p>");
+    /* Fax dialog general help 2/2 */
+_("<p>When adding or editing a user, a dialog will be shown with
+the following fields:</p>") +
+
+    /* Fax dialog help for options 1/5 */
+_("<p><b>User</b>: The system user who wants to receive or send fax 
+calls.</p>") +
+
+    /* Fax dialog help for options 2/5 */
+_("<p><b>Faxnumbers</b>: One or more fax numbers (delimited by
+commas) which belong (only!) to this user. The first number 
+is used as own number when sending faxes.</p>") +
+
+    /* Fax dialog help for options 3/5 */
+_("<p><b>StationID</b>: The fax station ID used by the fax protocol.
+Normally set to the external number in international format, e.g.
+<tt>+49 89 123456</tt>.</p>") +
+
+    /* Fax dialog help for options 4/5 */
+_("<p><b>Headline</b>: The headline used for sending faxes - normally
+a string containing some department or personal name.</p>") +
+
+    /* Fax dialog help for options 5/5 */
+_("<p><b>Action</b>: By default, received faxes will be sent to the user
+as mail and saved to disk. This is named <tt>MailAndSave</tt>. To
+disable the mails, set this to <tt>SaveOnly</tt>.</p>");
 
     integer max = 0;
     integer items = 0;
@@ -61,7 +89,8 @@ _("<p>...</p>");
 	    k,
 	    m["fax_numbers"]:"",
 	    m["fax_stationID"]:"",
-	    m["fax_headline"]:"");
+	    m["fax_headline"]:"",
+	    m["fax_action"]:"");
 	change(table_items, item);
 	items = items + 1;
     });
@@ -176,7 +205,8 @@ _("<p>...</p>");
 		    k,
 		    m["fax_numbers"]:"",
 		    m["fax_stationID"]:"",
-		    m["fax_headline"]:"");
+		    m["fax_headline"]:"",
+		    m["fax_action"]:"");
 		change(table_items, item);
 		items = items + 1;
 	    });
@@ -211,6 +241,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	/* set globals as defaults */
 	uc["fax_stationID"] = Fax::gconfig["fax_stationID"]:"";
 	uc["fax_headline"] = Fax::gconfig["fax_headline"]:"";
+	uc["fax_action"] = Fax::gconfig["fax_action"]:"MailAndSave";
     }
     /* add at least the user */
     if (uname != "" && !contains(Fax::users, uname)) {
@@ -219,6 +250,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
     }
 
     y2debug("uc=%1", uc);
+    list actions = [ "MailAndSave", "SaveOnly" ];
 
     UI::OpenDialog(`opt(`decorated),`VBox(
 	`HSpacing(1),
@@ -230,7 +262,9 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	    /* TextEntry label */
 	    `TextEntry(`id(`station), _("&StationID"), uc["fax_stationID"]:""),
 	    /* TextEntry label */
-	    `TextEntry(`id(`headline), _("&Headline"), uc["fax_headline"]:"")
+	    `TextEntry(`id(`headline), _("&Headline"), uc["fax_headline"]:""),
+	    /* ComboBox label */
+	    `ComboBox(`id(`action), `opt(`hstretch), _("&Action"), actions)
 	),
 	`HSpacing(1),
 	`HBox(
@@ -243,6 +277,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	UI::ChangeWidget(`id(`user), `Value, uname);
     UI::ChangeWidget(`id(`phone), `ValidChars, "0123456789#*,");
     UI::ChangeWidget(`id(`station), `ValidChars, "0123456789+ ");
+    UI::ChangeWidget(`id(`action), `Value, uc["fax_action"]:"MailAndSave");
     UI::SetFocus(`id(`user));
 
     any ret = nil;
@@ -290,6 +325,16 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	    continue;
 	}
 	uc = add(uc, "fax_headline", sval);
+	
+	sval = UI::QueryWidget(`id(`action), `Value);
+	if(sval == nil || sval == "") {
+	    /* ErrorPopup text */
+	    UI::ErrorPopup(_("Action is incorrect"));
+	    UI::SetFocus(`id(`action));
+	    continue;
+	}
+	uc = add(uc, "fax_action", sval);
+
 	break;
     }
     y2debug("ret=%1", ret);

@@ -40,16 +40,44 @@ global define symbol Answering_machineMainDialog() ``{
 	_("Delay"),
 	/* Table header 4/5 */
 	_("Duration"),
-	/* Table header 4/5 */
+	/* Table header 5/5 */
 	_("Action")
     );
 
-    /* Answering machine dialog help 1/2 */
-    string help = _("<p>A answering machine for one or more users can be 
-set up in this dialog.</p>") +
+    /* Answering machine general help 1/2 */
+    string help = _("<p>An answering machine for one or more users can be
+set up in this dialog. Each user must have at least one own unique phone
+number configured. Please refer to the telecommunication chapter in the manuals
+for further details.</p>") +
 
-    /* Answering machine  help 2/2 */
-_("<p>...</p>");
+    /* Answering machine general help 2/2 */
+_("<p>When adding or editing a user, a dialog will be shown with
+the following details:</p>") +
+
+    /* Answering machine help for options 1/6 */
+_("<p><b>User</b>: The system user who wants to receive calls with the
+answering machine.</p>") +
+
+    /* Answering machine help for options 2/6 */
+_("<p><b>Phonenumbers</b>: One or more phone numbers (delimited by
+commas) which belong (only!) to this user.</p>") +
+
+    /* Answering machine help for options 3/6 */
+_("<p><b>Delay</b>: Delay in seconds before the answering machine responds
+to the call.</p>") +
+
+    /* Answering machine help for options 4/6 */
+_("<p><b>Duration</b>: Maximum record length for one call.</p>") +
+
+    /* Answering machine help for options 5/6 */
+_("<p><b>Action</b>: By default, recorded calls will be sent to the user
+as mail and saved to disk. This is named <tt>MailAndSave</tt>. To
+disable the mails, set this to <tt>SaveOnly</tt>. <tt>None</tt> will forbid
+recording - the answering machine will only respond to the call and play the
+announcement.</p>") +
+
+    /* Answering machine help for options 6/6 */
+_("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 
     integer max = 0;
     integer items = 0;
@@ -214,15 +242,15 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
     if (uc == $[]) {
 	/* set globals as defaults */
 	uc["voice_delay"] = Answering_machine::gconfig["voice_delay"]:"10";
-	uc["record_length"] = Answering_machine::gconfig["record_length"]:"30";
-	uc["voice_action"] = Answering_machine::gconfig["voice_action"]:"mail";
+	uc["record_length"] = Answering_machine::gconfig["record_length"]:"60";
+	uc["voice_action"] = Answering_machine::gconfig["voice_action"]:"MailAndSave";
     }
 
     /* values for delay */
     list delay_val = [ "", "0", "5", "10", "15", "20", "30", "40", "50", "60", "90", "120" ];
     if (!contains(delay_val, uc["voice_delay"]:""))
 	delay_val = add(delay_val, uc["voice_delay"]:"");
-    
+
     /* values for record_length */
     list rlength_val = [ "", "0", "10", "20", "30", "45", "60", "90", "120", "150", "180", "240", "300" ];
     if (!contains(rlength_val, uc["record_length"]:""))
@@ -235,7 +263,7 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
     }
 
     y2debug("uc=%1", uc);
-    list actions = [ "none", "mail", "saveonly" ];
+    list actions = [ "None", "MailAndSave", "SaveOnly" ];
 
     UI::OpenDialog(`opt(`decorated),`VBox(
 	`HSpacing(1),
@@ -263,8 +291,8 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
     if(uname != "")
 	UI::ChangeWidget(`id(`user), `Value, uname);
     UI::ChangeWidget(`id(`delay), `Value, uc["voice_delay"]:"10");
-    UI::ChangeWidget(`id(`duration), `Value, uc["record_length"]:"30");
-    UI::ChangeWidget(`id(`action), `Value, uc["voice_action"]:"mail");
+    UI::ChangeWidget(`id(`duration), `Value, uc["record_length"]:"60");
+    UI::ChangeWidget(`id(`action), `Value, uc["voice_action"]:"MailAndSave");
     UI::ChangeWidget(`id(`phone), `ValidChars, "0123456789#*,");
     UI::ChangeWidget(`id(`delay), `ValidChars, "0123456789");
     UI::ChangeWidget(`id(`duration), `ValidChars, "0123456789");
