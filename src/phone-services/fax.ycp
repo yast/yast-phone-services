@@ -111,7 +111,7 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
 	    m["fax_action"]:"",
 	    m["fax_stationID"]:"",
 	    m["fax_headline"]:"");
-	change(table_items, item);
+	table_items = add(table_items, item);
 	items = items + 1;
     });
 

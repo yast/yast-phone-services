@@ -210,7 +210,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 		    m["voice_delay"]:"",
 		    m["record_length"]:"",
 		    m["voice_action"]:"");
-		change(table_items, item);
+		table_items = add(table_items, item);
 		items = items + 1;
 	    });
 	    max = items;
