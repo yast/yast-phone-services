@@ -1,8 +1,9 @@
 -------------------------------------------------------------------
-Mon Feb 3 13:35:00 CET 2003 - kkeil@suse.de
+Mon Feb 3 17:25:00 CET 2003 - kkeil@suse.de
 
 - add package check + install
 - add start capisuite
+- 2.7.1
 
 -------------------------------------------------------------------
 Fri Jan 31 14:05:02 CET 2003 - ghillie@suse.de
