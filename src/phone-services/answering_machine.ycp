@@ -73,9 +73,9 @@ _("<p><b>Duration</b>: Maximum record length for one call.</p>") +
 
     /* Answering machine help for options 5/6 */
 _("<p><b>Action</b>: By using the default <tt>MailAndSave</tt>, recorded
-calls will be sent to the user as mail and saved to disk. To
-disable the mails, set this to <tt>SaveOnly</tt>. <tt>None</tt> will forbid
-recording -- the answering machine will only play the announcement.</p>
+calls are sent to the user as mail and saved to disk. To
+disable the mails, set this to <tt>SaveOnly</tt>. <tt>None</tt> forbids
+recording -- the answering machine only plays the announcement.</p>
 ") +
 
     /* Answering machine help for options 6/6 */

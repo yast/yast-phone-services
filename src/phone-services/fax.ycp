@@ -68,7 +68,7 @@ _("<p><b>User</b>: The system user to which this fax account belongs.</p> \n") +
     /* Fax dialog help for options 2/6 */
 _("<p><b>Fax Numbers</b>: The numbers (separated by commas)
 on which faxes should be received for this user. If you enter
-<tt>*</tt>, the user will get <b>any</b> call. Leave
+<tt>*</tt>, the user gets <b>any</b> call. Leave
 this empty for a send-only account.</p>
 ") +
 
@@ -89,8 +89,9 @@ a string containing some name.</p>
 
     /* Fax dialog help for options 6/6 */
 _("<p><b>Action</b>: By using the default <tt>MailAndSave</tt>,
-received faxes will be sent to the user as mail and saved to disk.
-To disable the mails, set this to <tt>SaveOnly</tt>.</p>");
+received faxes are sent to the user as mail and saved to disk.
+To disable the mails, set this to <tt>SaveOnly</tt>.</p>
+");
 
     integer max = 0;
     integer items = 0;
