@@ -13,9 +13,12 @@
 
 textdomain "phone-services";
 
+import "CommandLine";
 import "Fax";
-import "Wizard";
 import "Label";
+import "String";
+import "Summary";
+import "Wizard";
 
 /* The main () */
 y2milestone("----------------------------------------");
@@ -23,29 +26,72 @@ y2milestone("fax module started");
 
 include "phone-services/fax.ycp";
 
-/**
- * Return a modification status
- * @return true if data was modified
- */
-define boolean Modified() ``{
-    return Fax::modified;
+any ret	= `back;
+
+// main sequence
+define any FaxSequence () {
+
+    Fax::Read();
+
+    Wizard::CreateDialog();
+    Wizard::SetDesktopIcon("fax");
+    Wizard::SetNextButton(`next, Label::FinishButton() );
+
+    /* main ui function */
+    any ret = FaxMainDialog();
+    y2debug("ret == %1", ret);
+
+    if(ret == `next && Fax::modified) {
+	Fax::Write();
+    }
+    UI::CloseDialog();
+    return ret;
 }
 
-Fax::Read();
+// command line summary handler
+define boolean FaxSummaryHandler (map options) {
 
-Wizard::CreateDialog();
-Wizard::SetDesktopIcon("fax");
-Wizard::SetNextButton(`next, Label::FinishButton() );
-
-/* main ui function */
-any ret = FaxMainDialog();
-y2debug("ret == %1", ret);
-
-if(ret == `next && Fax::modified) {
-    Fax::Write();
+    list<list<string> > items	= [];
+    foreach (string user, map m, Fax::aconfig, {
+	items	= add (items, [ user, m["fax_numbers"]:"", m["outgoing_MSN"]:"", m["fax_action"]:"", m["fax_stationID"]:"", m["fax_headline"]:"" ]);
+    });
+    if (size (items) > 0)
+    {
+	CommandLine::Print (String::TextTable ([
+	    _("User"),
+	    _("Fax Numbers"),
+	    _("MSN"),
+	    _("Action"),
+	    _("StationID"),
+	    _("Headline")
+	], items, $[]));
+    }
+    else
+    {
+	CommandLine::Print (Summary::NotConfigured ());
+    }
+    return false;
 }
 
-UI::CloseDialog();
+
+/* -- the command line description map -------------------------------------- */
+map cmdline = $[
+    "id"		: "fax",
+    // translators: command line help text for fax module
+    "help"		: _("Fax configuration."),
+    "guihandler"	: FaxSequence,
+    "initialize"	: Fax::Read,
+    "finish"		: Fax::Write,
+    "actions"		: $[
+	"summary" :$[
+	    "handler"	: FaxSummaryHandler,
+	    // command line help text for 'summary' action
+	    "help"	: _("Fax configuration summary."),
+	],
+    ],
+];
+
+ret = CommandLine::Run (cmdline);
 
 /* Finish */
 y2milestone( "Returning with %1", ret );

@@ -97,20 +97,11 @@ global define boolean Read() {
     Users::ReadNewSet ("nis");
     y2debug("UsersCache::usernames (local): %1", UsersCache::GetUsernames("local"));
 
-    /*
-    foreach ( `key, `l,  UsersCache::usernamelists, {
-	if (key != "system") {
-	    foreach (`uname, l, {
-		if (!contains(users, uname))
-			users = add(users, uname);
-	    });
-	}
-    });
-    */
     users = (list<string>) merge (
 	UsersCache::GetUsernames("local"),
 	UsersCache::GetUsernames("nis")
     );
+    Users::SetGUI (true);
 
     y2debug("users=%1", users);
 

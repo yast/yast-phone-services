@@ -99,6 +99,7 @@ global define boolean Read() {
 	UsersCache::GetUsernames("local"),
 	UsersCache::GetUsernames("nis")
     );
+    Users::SetGUI (true);
     y2debug("users=%1", users);
 
     return true;

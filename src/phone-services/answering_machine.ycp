@@ -186,7 +186,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 	else if(ret == `delete) {
 	    items = items - 1;
 	    string cur = (string) UI::QueryWidget(`id(`table), `CurrentItem);
-	    table_items = filter(term e, table_items, ``(cur != select(select(e, 0, []), 0, "")));
+	    table_items = filter(term e, table_items, ``(cur != e[0,0]:""));
 	    userconf = (map<string,map>) filter(`k, `v, userconf, ``(k != cur));
 	    new_table = true;
 	}

@@ -14,8 +14,11 @@
 textdomain "phone-services";
 
 import "Answering_machine";
-import "Wizard";
+import "CommandLine";
 import "Label";
+import "String";
+import "Summary";
+import "Wizard";
 
 /* The main () */
 y2milestone("----------------------------------------");
@@ -23,29 +26,76 @@ y2milestone("answering_machine module started");
 
 include "phone-services/answering_machine.ycp";
 
-/**
- * Return a modification status
- * @return true if data was modified
- */
-define boolean Modified() ``{
-    return Answering_machine::modified;
+any ret = `back;
+
+// main sequence for a.m.
+define any Answering_machineSequence () {
+
+    Answering_machine::Read();
+
+    Wizard::CreateDialog();
+    Wizard::SetDesktopIcon("answering_machine");
+    Wizard::SetNextButton(`next, Label::FinishButton() );
+
+    /* main ui function */
+    any ret = Answering_machineMainDialog();
+    y2debug("ret == %1", ret);
+
+    if(ret == `next && Answering_machine::modified) {
+	Answering_machine::Write();
+    }
+    UI::CloseDialog();
+    return ret;
 }
 
-Answering_machine::Read();
+// command line summary handler
+define boolean Answering_machineSummaryHandler (map options) {
 
-Wizard::CreateDialog();
-Wizard::SetDesktopIcon("answering_machine");
-Wizard::SetNextButton(`next, Label::FinishButton() );
-
-/* main ui function */
-any ret = Answering_machineMainDialog();
-y2debug("ret == %1", ret);
-
-if(ret == `next && Answering_machine::modified) {
-    Answering_machine::Write();
+    list<list<string> > items	= [];
+    foreach (string user, map m, Answering_machine::aconfig, {
+	items	= add (items, [
+	    user,
+	    m["voice_numbers"]:"",
+	    m["voice_delay"]:"",
+	    m["record_length"]:"",
+	    m["voice_action"]:""
+	]);
+    });
+    if (size (items) > 0)
+    {
+	CommandLine::Print (String::TextTable ([
+	    _("User"),
+	    _("Phone Numbers"),
+	    _("Delay"),
+	    _("Duration"),
+	    _("Action")
+	], items, $[]));
+    }
+    else
+    {
+	CommandLine::Print (Summary::NotConfigured ());
+    }
+    return false;
 }
 
-UI::CloseDialog();
+/* -- the command line description map -------------------------------------- */
+map cmdline = $[
+    "id"		: "answering_machine",
+    // translators: command line help text for answering_machine module
+    "help"		: _("Answering machine configuration."),
+    "guihandler"	: Answering_machineSequence,
+    "initialize"	: Answering_machine::Read,
+    "finish"		: Answering_machine::Write,
+    "actions"		: $[
+	"summary" :$[
+	    "handler"	: Answering_machineSummaryHandler,
+	    // command line help text for 'summary' action
+	    "help"	: _("Answering_machine configuration summary."),
+	],
+    ],
+];
+
+ret = CommandLine::Run (cmdline);
 
 /* Finish */
 y2milestone( "Returning with %1", ret );
