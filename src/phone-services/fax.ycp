@@ -46,32 +46,37 @@ global define symbol FaxMainDialog() ``{
 
     /* Fax dialog general help 1/2 */
     string help = _("<p>The fax system for one or more users can be
-set up in this dialog. Each user must have at least one own unique fax
-number configured. Please refer to the telecommunication chapter in the
-manuals for further details.</p>") +
+set up in this dialog. Each user must have at least one unique fax
+number configured. Refer to the telecommunication chapter in the
+manuals for further details.</p>
+") +
 
     /* Fax dialog general help 2/2 */
 _("<p>When adding or editing a user, a dialog will be shown with
 the following fields:</p>") +
 
     /* Fax dialog help for options 1/5 */
-_("<p><b>User</b>: The system user who wants to receive or send fax 
-calls.</p>") +
+_("<p><b>User</b>: The system user to receive or send fax 
+calls.</p>
+") +
 
     /* Fax dialog help for options 2/5 */
-_("<p><b>Faxnumbers</b>: One or more fax numbers (delimited by
-commas) which belong (only!) to this user. The first number 
-is used as own number for sending faxes. You can also enter \"<tt>*</tt>\"
-which means the user will get <b>any</b> call.</p>") +
+_("<p><b>Fax Numbers</b>: One or more fax numbers (separated by
+commas) that belong only to this user. The first number 
+is used as the number for sending faxes. If you enter <tt>*</tt>,
+the user will get <b>any</b> call.</p>
+") +
 
     /* Fax dialog help for options 3/5 */
 _("<p><b>StationID</b>: The fax station ID used by the fax protocol.
-Normally set to the external number in international format, e.g.
-<tt>+49 89 12345</tt>.</p>") +
+Normally set to the external number in international format, such as
+<tt>+49 89 12345</tt>.</p>
+") +
 
     /* Fax dialog help for options 4/5 */
-_("<p><b>Headline</b>: The headline used for sending faxes - normally
-a string containing some name.</p>") +
+_("<p><b>Headline</b>: The headline used for sending faxes -- normally
+a string containing some name.</p>
+") +
 
     /* Fax dialog help for options 5/5 */
 _("<p><b>Action</b>: By using the default <tt>MailAndSave</tt>, 
@@ -298,7 +303,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	sval = UI::QueryWidget(`id(`phone), `Value);
         if(sval == nil || sval == "") {
             /* ErrorPopup text */
-            UI::ErrorPopup(_("Faxnumbers must not be empty"));
+            UI::ErrorPopup(_("Fax Numbers must not be empty"));
             UI::SetFocus(`id(`phone));
             continue;
         }

@@ -46,9 +46,10 @@ global define symbol Answering_machineMainDialog() ``{
 
     /* Answering machine general help 1/2 */
     string help = _("<p>An answering machine for one or more users can be
-set up in this dialog. Each user must have at least one own unique phone
-number configured. Please refer to the telecommunication chapter in the manuals
-for further details.</p>") +
+set up in this dialog. Each user must have at least one unique phone
+number configured. Refer to the telecommunication chapter in the manuals
+for further details.</p>
+") +
 
     /* Answering machine general help 2/2 */
 _("<p>When adding or editing a user, a dialog will be shown with
@@ -59,9 +60,10 @@ _("<p><b>User</b>: The system user who wants to receive calls with the
 answering machine.</p>") +
 
     /* Answering machine help for options 2/6 */
-_("<p><b>Phonenumbers</b>: One or more phone numbers (delimited by
-commas) which belong (only!) to this user. You can also enter \"<tt>*</tt>\"
-which means the user will get <b>any</b> call.</p>") +
+_("<p><b>Phone Numbers</b>: One or more phone numbers (separated by
+commas) that belong (only) to this user. You can also enter <tt>*</tt>,
+which means the user will get <b>any</b> call.</p>
+") +
 
     /* Answering machine help for options 3/6 */
 _("<p><b>Delay</b>: Delay in seconds before the answering machine responds
@@ -74,7 +76,8 @@ _("<p><b>Duration</b>: Maximum record length for one call.</p>") +
 _("<p><b>Action</b>: By using the default <tt>MailAndSave</tt>, recorded 
 calls will be sent to the user as mail and saved to disk. To
 disable the mails, set this to <tt>SaveOnly</tt>. <tt>None</tt> will forbid
-recording - the answering machine will only play the announcement.</p>") +
+recording -- the answering machine will only play the announcement.</p>
+") +
 
     /* Answering machine help for options 6/6 */
 _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
@@ -316,7 +319,7 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 	sval = UI::QueryWidget(`id(`phone), `Value);
         if(sval == nil || sval == "") {
             /* ErrorPopup text */
-            UI::ErrorPopup(_("Phonenumbers must not be empty."));
+            UI::ErrorPopup(_("Phone numbers must not be empty."));
             UI::SetFocus(`id(`phone));
             continue;
         }
