@@ -18,7 +18,7 @@ Name = _("Phone Answering Machine")
 Group = Network
 
 ; icon displayed in y2cc
-Icon = PhoneTTOffhook.png
+Icon = answering-machine.png
 
 ; // *one* *short* descriptive line for y2cc
 Helptext = _("Set up phone answering machine")
