@@ -34,7 +34,9 @@ define boolean Modified() ``{
 Fax::Read();
 
 Wizard::CreateDialog();
+Wizard::SetDesktopIcon("fax");
 Wizard::ReplaceNextButton(`PushButton(`id(`next), `opt(`default), Label::FinishButton()));
+
 /* main ui function */
 any ret = FaxMainDialog();
 y2debug("ret == %1", ret);

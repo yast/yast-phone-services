@@ -85,7 +85,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 
     integer max = 0;
     integer items = 0;
-    list table_items = [];
+    list<term> table_items = [];
     map<string,map> userconf = Answering_machine::aconfig;
 
     /* make ui items from config map */
@@ -97,7 +97,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 	    m["voice_delay"]:"",
 	    m["record_length"]:"",
 	    m["voice_action"]:"");
-	change(table_items, item);
+	table_items = add(table_items, item);
 	items = items + 1;
     });
 
@@ -187,7 +187,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 	    items = items - 1;
 	    string cur = (string) UI::QueryWidget(`id(`table), `CurrentItem);
 	    table_items = filter(term e, table_items, ``(cur != select(select(e, 0, []), 0, "")));
-	    userconf = filter(`k, `v, userconf, ``(k != cur));
+	    userconf = (map<string,map>) filter(`k, `v, userconf, ``(k != cur));
 	    new_table = true;
 	}
 	else if(ret == `back) {

@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Mar  8 18:17:52 CET 2004 - msvec@suse.cz
+
+- type cast fixes
+- set title icons
+- 2.9.3
+
+-------------------------------------------------------------------
 Fri Mar  5 12:51:11 CET 2004 - msvec@suse.cz
 
 - more strict type casts

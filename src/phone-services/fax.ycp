@@ -97,7 +97,7 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
 
     integer max = 0;
     integer items = 0;
-    list table_items = [];
+    list<term> table_items = [];
     map<string,map> userconf = Fax::aconfig;
     string prefix = Fax::gconfig["dial_prefix"]:"";
 
@@ -217,7 +217,7 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
 	    items = items - 1;
 	    string cur = (string) UI::QueryWidget(`id(`table), `CurrentItem);
 	    table_items = filter(term e, table_items, ``(cur != select(select(e, 0, []), 0, "")));
-	    userconf = filter(`k, `v, userconf, ``(k != cur));
+	    userconf = (map<string,map>) filter(`k, `v, userconf, ``(k != cur));
 	    new_table = true;
 	}
 	else if(ret == `back) {
@@ -241,7 +241,7 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
 		    m["fax_action"]:"",
 		    m["fax_stationID"]:"",
 		    m["fax_headline"]:"");
-		change(table_items, item);
+		table_items = add(table_items, item);
 		items = items + 1;
 	    });
 	    max = items;
