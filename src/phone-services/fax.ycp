@@ -54,32 +54,32 @@ manuals for further details.</p>
 ") +
 
     /* Fax dialog general help 2/3 */
-_("<p><b>Prefix</b>: Only for users behind a PBX. Please enter the
+_("<p><b>Prefix</b>: Only for users behind a PBX. Enter the
 prefix number for getting a public line. This number will be dialed
-before any destination number.</p>") +
+before any destination number.</p>
+") +
 
     /* Fax dialog general help 3/3 */
 _("<p>When adding or editing a user, a dialog will be shown with
 the following fields:</p>") +
 
     /* Fax dialog help for options 1/6 */
-_("<p><b>User</b>: The system user this fax account belongs to.</p> 
-") +
+_("<p><b>User</b>: The system user to which this fax account belongs.</p> \n") +
 
     /* Fax dialog help for options 2/6 */
 _("<p><b>Fax Numbers</b>: The numbers (separated by commas)
 on which faxes should be received for this user. If you enter 
-<tt>*</tt> the user will get <b>any</b> call. You can also leave
-this empty for a send only account.</p>
+<tt>*</tt>, the user will get <b>any</b> call. Leave
+this empty for a send-only account.</p>
 ") +
 
     /* Fax dialog help for options 3/6 */
-_("<p><b>Outgoing MSN</b>: The own number used for outgoing calls. If
-it's empty, then the first number of <b>Fax Numbers</b> is used.</p>
+_("<p><b>Outgoing MSN</b>: The number to use for outgoing calls. If
+empty, the first number of <b>Fax Numbers</b> is used.</p>
 ") +
 
     /* Fax dialog help for options 4/6 */
-_("<p><b>StationID</b>: The fax station ID. Should be set to the external 
+_("<p><b>StationID</b>: The fax station ID. Set it to the external 
 number in international format, such as <tt>+49 89 12345</tt>.</p>
 ") +
 
@@ -349,7 +349,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	oval = UI::QueryWidget(`id(`outgoing), `Value);
         if((sval == nil || sval == "") && (oval == nil || oval == "")) {
             /* ErrorPopup text */
-            UI::ErrorPopup(_("Fax Numbers and Outgoing MSN must not be both empty"));
+            UI::ErrorPopup(_("Fax Numbers and Outgoing MSN must not both be empty"));
             UI::SetFocus(`id(`phone));
             continue;
         }
