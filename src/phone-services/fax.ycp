@@ -61,21 +61,22 @@ calls.</p>") +
     /* Fax dialog help for options 2/5 */
 _("<p><b>Faxnumbers</b>: One or more fax numbers (delimited by
 commas) which belong (only!) to this user. The first number 
-is used as own number when sending faxes.</p>") +
+is used as own number for sending faxes. You can also enter \"<tt>*</tt>\"
+which means the user will get <b>any</b> call.</p>") +
 
     /* Fax dialog help for options 3/5 */
 _("<p><b>StationID</b>: The fax station ID used by the fax protocol.
 Normally set to the external number in international format, e.g.
-<tt>+49 89 123456</tt>.</p>") +
+<tt>+49 89 12345</tt>.</p>") +
 
     /* Fax dialog help for options 4/5 */
 _("<p><b>Headline</b>: The headline used for sending faxes - normally
-a string containing some department or personal name.</p>") +
+a string containing some name.</p>") +
 
     /* Fax dialog help for options 5/5 */
-_("<p><b>Action</b>: By default, received faxes will be sent to the user
-as mail and saved to disk. This is named <tt>MailAndSave</tt>. To
-disable the mails, set this to <tt>SaveOnly</tt>.</p>");
+_("<p><b>Action</b>: By using the default <tt>MailAndSave</tt>, 
+received faxes will be sent to the user as mail and saved to disk.
+To disable the mails, set this to <tt>SaveOnly</tt>.</p>");
 
     integer max = 0;
     integer items = 0;
@@ -298,8 +299,12 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	uc = add(uc, "ID", user);
 
 	sval = UI::QueryWidget(`id(`phone), `Value);
-	/* fax_numbers "" is OK, all calls acepted */
-
+        if(sval == nil || sval == "") {
+            /* ErrorPopup text */
+            UI::ErrorPopup(_("Faxnumbers must not be empty"));
+            UI::SetFocus(`id(`phone));
+            continue;
+        }
 	uc = add(uc, "fax_numbers", sval);
 
 	sval = UI::QueryWidget(`id(`station), `Value);
@@ -325,7 +330,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	    continue;
 	}
 	uc = add(uc, "fax_headline", sval);
-	
+
 	sval = UI::QueryWidget(`id(`action), `Value);
 	if(sval == nil || sval == "") {
 	    /* ErrorPopup text */

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jan 31 14:05:02 CET 2003 - ghillie@suse.de
+
+- forbidden empty fax_numbers and phone_numbers, use "*" instead
+- updated help texts accordingly
+
+-------------------------------------------------------------------
 Wed Jan 29 16:22:07 CET 2003 - ghillie@suse.de
 
 - [global] section was renamed to [GLOBAL] 

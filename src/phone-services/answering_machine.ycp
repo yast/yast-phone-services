@@ -60,7 +60,8 @@ answering machine.</p>") +
 
     /* Answering machine help for options 2/6 */
 _("<p><b>Phonenumbers</b>: One or more phone numbers (delimited by
-commas) which belong (only!) to this user.</p>") +
+commas) which belong (only!) to this user. You can also enter \"<tt>*</tt>\"
+which means the user will get <b>any</b> call.</p>") +
 
     /* Answering machine help for options 3/6 */
 _("<p><b>Delay</b>: Delay in seconds before the answering machine responds
@@ -70,11 +71,10 @@ to the call.</p>") +
 _("<p><b>Duration</b>: Maximum record length for one call.</p>") +
 
     /* Answering machine help for options 5/6 */
-_("<p><b>Action</b>: By default, recorded calls will be sent to the user
-as mail and saved to disk. This is named <tt>MailAndSave</tt>. To
+_("<p><b>Action</b>: By using the default <tt>MailAndSave</tt>, recorded 
+calls will be sent to the user as mail and saved to disk. To
 disable the mails, set this to <tt>SaveOnly</tt>. <tt>None</tt> will forbid
-recording - the answering machine will only respond to the call and play the
-announcement.</p>") +
+recording - the answering machine will only play the announcement.</p>") +
 
     /* Answering machine help for options 6/6 */
 _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
@@ -317,8 +317,12 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 	uc = add(uc, "ID", user);
 
 	sval = UI::QueryWidget(`id(`phone), `Value);
-	/* voice_numbers "" is OK, all calls acepted */
-
+        if(sval == nil || sval == "") {
+            /* ErrorPopup text */
+            UI::ErrorPopup(_("Phonenumbers must not be empty."));
+            UI::SetFocus(`id(`phone));
+            continue;
+        }
 	uc = add(uc, "voice_numbers", sval);
 
 	sval = UI::QueryWidget(`id(`delay), `Value);
