@@ -2,6 +2,7 @@
 Sun Feb 23 18:13:47 CET 2003 - kkeil@suse.de
 
 - fix user selection list to display NIS users too (#23961)
+- 2.7.4
 
 -------------------------------------------------------------------
 Tue Feb 11 13:46:16 CET 2003 - kkeil@suse.de
