@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 3 13:35:00 CET 2003 - kkeil@suse.de
+
+- add package check + install
+- add start capisuite
+
+-------------------------------------------------------------------
 Fri Jan 31 14:05:02 CET 2003 - ghillie@suse.de
 
 - forbidden empty fax_numbers and phone_numbers, use "*" instead
