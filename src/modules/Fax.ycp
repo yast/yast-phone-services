@@ -49,6 +49,12 @@ map gconfig_init = $[];
 string conf_file = "/etc/capisuite/fax.conf";
 
 /**
+ * needed packages
+ */
+
+list need_pkgs = [ "capisuite", "sfftobmp" ];
+
+/**
  * Read config settings
  * @return true if success
  */
@@ -163,6 +169,14 @@ global define boolean Write() ``{
 
     y2debug("write %1 ret %2",cfs, ret);
     modified = false;
+    if (ret == true) {
+	/* check for installed packages */
+	include "network/routines.ycp";
+	symbol retp = Packages(need_pkgs);
+	/* start capisuite */
+	if (SCR::Read(.target.size, "/etc/init.d/capisuite") > 0)
+		SCR::Execute(.target.bash, "/etc/init.d/capisuite start");
+    }
     return ret == true;
 }
 
