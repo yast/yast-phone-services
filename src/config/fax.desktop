@@ -1,0 +1,45 @@
+[Desktop Entry]
+Type=Application
+Categories=Qt;X-SuSE-YaST-Network;
+
+X-KDE-ModuleType=Library
+X-KDE-RootOnly=true
+X-KDE-HasReadOnlyMode=true
+X-KDE-Library=yast2
+X-KDE-FactoryName=fax
+
+X-SuSE-YaST-Group=Network
+X-SuSE-YaST-Argument=
+X-SuSE-YaST-RootOnly=true
+X-SuSE-YaST-AutoInst=
+X-SuSE-YaST-Geometry=
+X-SuSE-YaST-SortKey=
+X-SuSE-YaST-AutoinstResource=
+
+Icon=FaxRecieving
+Exec=/sbin/yast2 fax 
+
+Name=Fax
+GenericName=Set up ISDN fax device
+GenericName[cs]=Nastavit ISDN fax
+GenericName[de]=ISDN-Faxgerät einrichten
+GenericName[es]=Configurar fax RDSI
+GenericName[hu]=Állítsa be az ISDN fax eszközt
+GenericName[it]=Impostare un dispositivo fax ISDN
+Name[ko]=팩스
+GenericName[ko]=ISDN 팩스 장치를 선택하십시오
+GenericName[nl]=ISDN fax apparaat instelling
+GenericName[pt]=Configurar dispositivo fax ISDN
+GenericName[sk]=Nastavenie zariadenia ISDN fax
+GenericName[sv]=Ställ in ISDN faxenhet
+Name[el]=Φαξ
+GenericName[el]=Εγκαταστήστε την ISDN συσκευή φαξ σας
+Name[fr]=Télécopie
+GenericName[fr]=Configurer le périphérique fax RNIS (ISDN)
+GenericName[ja]=ISDN Fax デバイスを設定する
+Name[lt]=Faksas
+GenericName[lt]=Konfigūruoti ISDN įrenginį
+Name[sl]=Telefaks
+GenericName[sl]=Nastavi ISDN telefaks napravo
+Name[tr]=Faks
+GenericName[tr]=ISDN faks aygıtını kur
