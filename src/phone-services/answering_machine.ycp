@@ -86,7 +86,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
     integer max = 0;
     integer items = 0;
     list table_items = [];
-    map userconf = Answering_machine::aconfig;
+    map<string,map> userconf = Answering_machine::aconfig;
 
     /* make ui items from config map */
     term item = nil;

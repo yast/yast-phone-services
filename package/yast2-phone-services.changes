@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Mar  5 12:51:11 CET 2004 - msvec@suse.cz
+
+- more strict type casts
+- 2.9.2
+
+-------------------------------------------------------------------
 Mon Feb 16 20:38:13 CET 2004 - msvec@suse.cz
 
 - syntax fixes, fixed neededforbuild

@@ -98,7 +98,7 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
     integer max = 0;
     integer items = 0;
     list table_items = [];
-    map userconf = Fax::aconfig;
+    map<string,map> userconf = Fax::aconfig;
     string prefix = Fax::gconfig["dial_prefix"]:"";
 
     /* make ui items from config map */
