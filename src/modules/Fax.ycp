@@ -5,8 +5,6 @@
  * Authors:	Karsten Keil <kkeil@suse.de>
  *
  * $Id$
- *
- * 
  */
 
 {
@@ -58,14 +56,14 @@ list<string> need_pkgs = [ "capisuite" ];
  * Read config settings
  * @return true if success
  */
-global define boolean Read() ``{
+global define boolean Read() {
 
     /* read config */
     path cf  = add(.phone-services.section, conf_file);
     if(SCR::Read(.target.size, conf_file) > 0) {
-	aconfig = listmap(string s, SCR::Dir(cf), ``{
+	aconfig = listmap(string s, SCR::Dir(cf), {
 	    path pp = add(add(.phone-services.v, conf_file), s);
-	    return $[ s : listmap(string vs, SCR::Dir(pp), ``{
+	    return $[ s : listmap(string vs, SCR::Dir(pp), {
 		return $[ vs : SCR::Read(add(pp, vs)) ];
 	    }) ];
 	});
@@ -74,7 +72,7 @@ global define boolean Read() ``{
 
     users = [];
 
-    aconfig = filter(string k, map v, aconfig, ``{
+    aconfig = filter(string k, map v, aconfig, {
 	if (k == "GLOBAL") {
 	    gconfig = v;
 	    return(false);
@@ -99,16 +97,16 @@ global define boolean Read() ``{
     y2debug("UsersCache::usernames (local): %1", UsersCache::GetUsernames("local"));
 
     /*
-    foreach ( `key, `l,  UsersCache::usernamelists, ``{
+    foreach ( `key, `l,  UsersCache::usernamelists, {
 	if (key != "system") {
-	    foreach (`uname, l, ``{
+	    foreach (`uname, l, {
 		if (!contains(users, uname))
 			users = add(users, uname);
 	    });
 	}
     });
     */
-    list<string> users = (list<string>) merge (
+    users = (list<string>) merge (
 	UsersCache::GetUsernames("local"),
 	UsersCache::GetUsernames("nis")
     );
@@ -122,7 +120,7 @@ global define boolean Read() ``{
  * Write fax settings and apply changes
  * @return true if success
  */
-global define boolean Write() ``{
+global define boolean Write() {
 
     if(!modified) return true;
     y2milestone("Writing configuration");
@@ -135,12 +133,12 @@ global define boolean Write() ``{
 
     /* check for installed packages */
     include "network/routines.ycp";
-    symbol retp = Packages(need_pkgs);
+    symbol retp = PackagesInstall(need_pkgs);
 
     /* build a list of deleted entries */
     list deleted = [];
-    foreach(`u, `m, aconfig_init, ``{
-    	if (aconfig[u]:$[] == $[])
+    foreach(any u, any m, aconfig_init, {
+	if (aconfig[u]:$[] == $[])
 	    deleted = add(deleted, u);
     });
     y2debug("deleted %1", deleted);
@@ -157,7 +155,7 @@ global define boolean Write() ``{
     path cf = add(.phone-services.v, conf_file);
     path cfs = add(cf, "GLOBAL");
 
-    foreach(string k, `v, gconfig, ``{
+    foreach(string k, any v, gconfig, {
 	path p = add(cfs, k);
 	ret = SCR::Write(p, v);
     });
@@ -165,7 +163,7 @@ global define boolean Write() ``{
     /* remove deleted user sections */
     if (deleted != []) {
 	cf = add(.phone-services.section, conf_file);
-	foreach (string d, deleted, ``{
+	foreach (string d, deleted, {
 	    cfs = add(cf, d);
 	    ret = SCR::Write(cfs, nil);
 	});
@@ -173,9 +171,9 @@ global define boolean Write() ``{
 
     /* update the users config */
     cf = add(.phone-services.v, conf_file);
-    foreach(string s, map m, aconfig, ``{
+    foreach(string s, map m, aconfig, {
 	cfs = add(cf, s);
-	foreach(string k, `v, m, ``{
+	foreach(string k, any v, m, {
 	    path p = add(cfs, k);
 	    ret = SCR::Write(p, v);
 	});
