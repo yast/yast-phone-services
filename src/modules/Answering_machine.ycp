@@ -160,10 +160,7 @@ global define boolean Write() ``{
 	    ret = SCR::Write(p, v);
 	});
     });
-    cf = add(.phone-services.section, conf_file);
-    cfs = add(cf, "xxxx");
-    
-    ret = SCR::Write(cfs, nil);
+
     y2debug("write %1 ret %2",cfs, ret);
     modified = false;
     return ret == true;

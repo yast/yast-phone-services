@@ -101,9 +101,6 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>");
     y2debug("userconf=%1", userconf);
     max = items;
 
-    list devs = Fax::GetDevices();
-    y2debug("devs=%1", devs);
-
     /* main dialog contents */
     term contents = `HBox(
 	`HSpacing(5),
