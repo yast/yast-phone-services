@@ -185,7 +185,10 @@ global define boolean Write() ``{
     if (ret == true) {
 	/* start capisuite */
 	if (SCR::Read(.target.size, "/etc/init.d/capisuite") > 0)
+	{
+		SCR::Execute(.target.bash, "/sbin/insserv -d capisuite");
 		SCR::Execute(.target.bash, "/etc/init.d/capisuite start");
+	}
     }
     return ret == true;
 }

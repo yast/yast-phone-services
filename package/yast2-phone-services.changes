@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jul 28 17:19:02 CEST 2003 - kkeil@suse.de
+
+- add FAX outgoing number and prefix setup for capisuite 0.4.3
+
+-------------------------------------------------------------------
 Thu Apr 24 11:08:28 CEST 2003 - jsuchome@suse.de
 
 - changed interface of function from Users module
