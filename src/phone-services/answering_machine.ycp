@@ -249,7 +249,7 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
 	    /* ComboBox label */
 	    `ComboBox(`id(`duration), `opt(`editable, `hstretch), _("D&uration"), rlength_val),
 	    /* ComboBox label */
-	    `ComboBox(`id(`action), `opt(`editable, `hstretch), _("&Action"), actions),
+	    `ComboBox(`id(`action), `opt(`hstretch), _("&Action"), actions),
 	    /* TextEntry label */
 	    `TextEntry(`id(`pin), _("P&in"), uc["pin"]:"")
 	),
@@ -268,7 +268,7 @@ global define map AM_UserEditDialog(string uname, map uconf) ``{
     UI::ChangeWidget(`id(`phone), `ValidChars, "0123456789#*,");
     UI::ChangeWidget(`id(`delay), `ValidChars, "0123456789");
     UI::ChangeWidget(`id(`duration), `ValidChars, "0123456789");
-    UI::ChangeWidget(`id(`pin), `ValidChars, "0123456789");
+    UI::ChangeWidget(`id(`pin), `ValidChars, "0123456789*#");
     UI::SetFocus(`id(`user));
 
     any ret = nil;

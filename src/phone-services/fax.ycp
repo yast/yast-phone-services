@@ -242,7 +242,7 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
     if(uname != "")
 	UI::ChangeWidget(`id(`user), `Value, uname);
     UI::ChangeWidget(`id(`phone), `ValidChars, "0123456789#*,");
-    UI::ChangeWidget(`id(`station), `ValidChars, "0123456789+. ");
+    UI::ChangeWidget(`id(`station), `ValidChars, "0123456789+ ");
     UI::SetFocus(`id(`user));
 
     any ret = nil;
@@ -273,11 +273,22 @@ global define map Fax_UserEditDialog(string uname, map uconf) ``{
 	    UI::ErrorPopup(_("StationID is incorrect"));
 	    UI::SetFocus(`id(`station));
 	    continue;
+	} else if(20 < size(sval)) {
+	    /* ErrorPopup text */
+	    UI::ErrorPopup(_("StationID maximum length is 20"));
+	    UI::SetFocus(`id(`station));
+	    continue;
 	}
 	uc = add(uc, "fax_stationID", sval);
 
 	sval = UI::QueryWidget(`id(`headline), `Value);
 	/* fax_headline "" is OK, default value  */
+	if(50 < size(sval)) {
+	    /* ErrorPopup text */
+	    UI::ErrorPopup(_("Headline maximum length is 50"));
+	    UI::SetFocus(`id(`headline));
+	    continue;
+	}
 	uc = add(uc, "fax_headline", sval);
 	break;
     }
