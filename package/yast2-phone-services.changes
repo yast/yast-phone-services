@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Apr 24 11:08:28 CEST 2003 - jsuchome@suse.de
+
+- changed interface of function from Users module
+
+-------------------------------------------------------------------
 Mon Feb 10 18:24:00 CET 2003 - kkeil@suse.de
 
 - fix start of capisuite (#25500) 

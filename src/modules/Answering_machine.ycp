@@ -94,11 +94,11 @@ global define boolean Read() ``{
     /* readin Userdatabase */
 
     Users::Read (``{ return false;}, false);
-    Users::ReadNewSet (`nis);
+    Users::ReadNewSet ("nis");
     y2debug("UsersCache::usernamelists  %1", UsersCache::usernamelists);  
 
     foreach ( `key, `l,  UsersCache::usernamelists, ``{
-	if (key != `system) {
+	if (key != "system") {
 	    foreach (`uname, l, ``{
 		if (!contains(users, uname))
 			users = add(users, uname);
