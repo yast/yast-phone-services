@@ -16,7 +16,7 @@ X-SuSE-YaST-Geometry=
 X-SuSE-YaST-SortKey=
 X-SuSE-YaST-AutoInstResource=
 
-Icon=answering-machine
+Icon=yast-answering_machine
 Exec=/sbin/yast2 answering_machine 
 
 Name=Phone Answering Machine
