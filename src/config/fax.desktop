@@ -20,7 +20,7 @@ Icon=yast-fax
 Exec=/sbin/yast2 fax 
 
 Name=Fax
-GenericName=Set up ISDN fax device
+GenericName=Set up an ISDN fax device
 GenericName[cs]=Nastavit ISDN fax
 GenericName[de]=ISDN-Faxgerät einrichten
 GenericName[es]=Configurar fax RDSI

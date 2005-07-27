@@ -20,7 +20,7 @@ Icon=yast-answering_machine
 Exec=/sbin/yast2 answering_machine 
 
 Name=Phone Answering Machine
-GenericName=Set up phone answering machine
+GenericName=Set up a phone answering machine
 Name[cs]=Telefonní záznamník
 GenericName[cs]=Nastavit telefonní záznamník
 Name[de]=Anrufbeantworter
