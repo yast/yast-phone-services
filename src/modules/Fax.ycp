@@ -94,7 +94,9 @@ global define boolean Read() {
 
     Users::SetGUI (false);
     Users::Read ();
-    Users::ReadNewSet ("nis");
+    if (Users::NISAvailable ()) {
+	Users::ReadNewSet ("nis");
+    }
     y2debug("UsersCache::usernames (local): %1", UsersCache::GetUsernames("local"));
 
     users = (list<string>) merge (

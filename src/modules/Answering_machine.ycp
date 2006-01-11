@@ -93,7 +93,9 @@ global define boolean Read() {
     /* readin Userdatabase */
     Users::SetGUI (false);
     Users::Read ();
-    Users::ReadNewSet ("nis");
+    if (Users::NISAvailable ()) {
+	Users::ReadNewSet ("nis");
+    }
 
     users = (list<string>) merge (
 	UsersCache::GetUsernames("local"),
