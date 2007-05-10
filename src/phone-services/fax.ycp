@@ -18,6 +18,12 @@ import "Wizard";
 import "Label";
 import "Popup";
 
+map<string,string> actionmap = $[
+				"MailAndSave" : _("MailAndSave"),
+				"SaveOnly"    : _("SaveOnly")
+				];
+
+
 define map Fax_UserEditDialog(string uname, map uconf);
 
 /**
@@ -108,7 +114,7 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
 	    k,
 	    m["fax_numbers"]:"",
 	    m["outgoing_MSN"]:"",
-	    m["fax_action"]:"",
+	    actionmap[m["fax_action"]:""]:"",
 	    m["fax_stationID"]:"",
 	    m["fax_headline"]:"");
 	table_items = add(table_items, item);
@@ -238,7 +244,7 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
 		    k,
 		    m["fax_numbers"]:"",
 		    m["outgoing_MSN"]:"",
-		    m["fax_action"]:"",
+		    actionmap[m["fax_action"]:""]:"",
 		    m["fax_stationID"]:"",
 		    m["fax_headline"]:"");
 		table_items = add(table_items, item);
@@ -290,7 +296,6 @@ define map Fax_UserEditDialog(string uname, map uconf) ``{
     }
 
     y2debug("uc=%1", uc);
-    list actions = [ "MailAndSave", "SaveOnly" ];
 
     UI::OpenDialog(`opt(`decorated),`HBox(
 	`HSpacing(2),
@@ -311,7 +316,11 @@ define map Fax_UserEditDialog(string uname, map uconf) ``{
 	    `TextEntry(`id(`headline), _("&Headline"), uc["fax_headline"]:""),
 	    `VSpacing(0.5),
 	    /* ComboBox label */
-	    `ComboBox(`id(`action), `opt(`hstretch), _("&Action"), actions),
+	    `ComboBox(`id(`action), `opt(`hstretch), _("&Action"), [
+			`item(`id(`MailAndSave),actionmap["MailAndSave"]:""),
+			`item(`id(`SaveOnly),actionmap["SaveOnly"]:"")
+
+		]),
 	    `VSpacing(1),
 	    `HBox(
 		`PushButton(`id(`ok), `opt(`default), Label::OKButton()),
@@ -326,13 +335,18 @@ define map Fax_UserEditDialog(string uname, map uconf) ``{
 	UI::ChangeWidget(`id(`user), `Value, uname);
     UI::ChangeWidget(`id(`phone), `ValidChars, "0123456789#*,");
     UI::ChangeWidget(`id(`station), `ValidChars, "0123456789+ ");
-    UI::ChangeWidget(`id(`action), `Value, uc["fax_action"]:"MailAndSave");
+    if (uc["fax_action"]:"" == "MailAndSave")
+    	UI::ChangeWidget(`id(`action), `Value, `MailAndSave);
+    else
+	UI::ChangeWidget(`id(`action), `Value, `SaveOnly);
+	
     UI::SetFocus(`id(`user));
 
     any ret = nil;
     string user = "";
     string sval = "";
     string oval = "";
+    any aval = nil;
 
     while(true) {
 	ret = UI::UserInput();
@@ -384,14 +398,16 @@ define map Fax_UserEditDialog(string uname, map uconf) ``{
 	}
 	uc = add(uc, "fax_headline", sval);
 
-	sval = (string) UI::QueryWidget(`id(`action), `Value);
-	if(sval == nil || sval == "") {
+	aval =  UI::QueryWidget(`id(`action), `Value);
+	if(aval == nil) {
 	    /* Popup::Error text */
 	    Popup::Error(_("Action is invalid."));
 	    UI::SetFocus(`id(`action));
 	    continue;
-	}
-	uc = add(uc, "fax_action", sval);
+	} else if (aval == `MailAndSave)
+	    uc = add(uc, "fax_action", "MailAndSave");
+	else if (aval == `SaveOnly)
+	    uc = add(uc, "fax_action", "SaveOnly");
 
 	break;
     }

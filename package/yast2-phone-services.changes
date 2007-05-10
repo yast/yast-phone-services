@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu May 10 11:22:25 CEST 2007 - jsuchome@suse.cz
+
+- enable translation of MailAndSave and SaveOnly entries (#145513)
+- 2.13.2
+
+-------------------------------------------------------------------
 Thu Mar  2 13:08:50 CET 2006 - jsuchome@suse.cz
 
 - reduced BuildRequires

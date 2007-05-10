@@ -18,6 +18,12 @@ import "Wizard";
 import "Label";
 import "Popup";
 
+
+map<string,string> actionmap = $[
+				"MailAndSave" : _("MailAndSave"),
+				"SaveOnly"    : _("SaveOnly")
+				];
+
 define map AM_UserEditDialog(string uname, map uconf);
 
 /**
@@ -96,7 +102,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 	    m["voice_numbers"]:"",
 	    m["voice_delay"]:"",
 	    m["record_length"]:"",
-	    m["voice_action"]:"");
+	    actionmap[m["voice_action"]:""]:"");
 	table_items = add(table_items, item);
 	items = items + 1;
     });
@@ -209,7 +215,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 		    m["voice_numbers"]:"",
 		    m["voice_delay"]:"",
 		    m["record_length"]:"",
-		    m["voice_action"]:"");
+		    actionmap[m["voice_action"]:""]:"");
 		table_items = add(table_items, item);
 		items = items + 1;
 	    });
@@ -264,7 +270,6 @@ define map AM_UserEditDialog(string uname, map uconf) ``{
     }
 
     y2debug("uc=%1", uc);
-    list actions = [ "None", "MailAndSave", "SaveOnly" ];
 
     UI::OpenDialog(`opt(`decorated),`VBox(
 	`HSpacing(1),
@@ -278,7 +283,11 @@ define map AM_UserEditDialog(string uname, map uconf) ``{
 	    /* ComboBox label */
 	    `ComboBox(`id(`duration), `opt(`editable, `hstretch), _("D&uration"), rlength_val),
 	    /* ComboBox label */
-	    `ComboBox(`id(`action), `opt(`hstretch), _("&Action"), actions),
+	    `ComboBox(`id(`action), `opt(`hstretch), _("&Action"), [
+			`item(`id(`MailAndSave),actionmap["MailAndSave"]:""),
+			`item(`id(`SaveOnly),actionmap["SaveOnly"]:"")
+
+		]),
 	    /* TextEntry label */
 	    `TextEntry(`id(`pin), _("P&in"), uc["pin"]:"")
 	),
@@ -293,7 +302,11 @@ define map AM_UserEditDialog(string uname, map uconf) ``{
 	UI::ChangeWidget(`id(`user), `Value, uname);
     UI::ChangeWidget(`id(`delay), `Value, uc["voice_delay"]:"10");
     UI::ChangeWidget(`id(`duration), `Value, uc["record_length"]:"60");
-    UI::ChangeWidget(`id(`action), `Value, uc["voice_action"]:"MailAndSave");
+    if (uc["voice_action"]:"" == "MailAndSave")
+    	UI::ChangeWidget(`id(`action), `Value, `MailAndSave);
+    else
+	UI::ChangeWidget(`id(`action), `Value, `SaveOnly);
+	
     UI::ChangeWidget(`id(`phone), `ValidChars, "0123456789#*,");
     UI::ChangeWidget(`id(`delay), `ValidChars, "0123456789");
     UI::ChangeWidget(`id(`duration), `ValidChars, "0123456789");
@@ -303,6 +316,7 @@ define map AM_UserEditDialog(string uname, map uconf) ``{
     any ret = nil;
     string user = "";
     string sval = "";
+    any aval = nil;
 
     while(true) {
 	ret = UI::UserInput();
@@ -339,14 +353,16 @@ define map AM_UserEditDialog(string uname, map uconf) ``{
 	/* Duration "" is OK, default value  */
 	uc = add(uc, "record_length", sval);
 
-	sval = (string) UI::QueryWidget(`id(`action), `Value);
-	if(sval == nil || sval == "") {
+	aval =  UI::QueryWidget(`id(`action), `Value);
+	if(aval == nil) {
 	    /* Popup::Error text */
 	    Popup::Error(_("Action is invalid."));
 	    UI::SetFocus(`id(`action));
 	    continue;
-	}
-	uc = add(uc, "voice_action", sval);
+	} else if (aval == `MailAndSave)
+	    uc = add(uc, "voice_action", "MailAndSave");
+	else if (aval == `SaveOnly)
+	    uc = add(uc, "voice_action", "SaveOnly");
 
 	sval = (string) UI::QueryWidget(`id(`pin), `Value);
 	/* Pin "" is OK, no remote control */
