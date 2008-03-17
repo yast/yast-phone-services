@@ -22,3 +22,4 @@ Exec=/sbin/yast2 answering_machine
 Name=Phone Answering Machine
 GenericName=Set up a phone answering machine
 X-KDE-SubstituteUID=true
+StartupNotify=true

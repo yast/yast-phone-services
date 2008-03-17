@@ -22,3 +22,4 @@ Exec=/sbin/yast2 fax
 Name=Fax
 GenericName=Set up an ISDN fax device
 X-KDE-SubstituteUID=true
+StartupNotify=true
