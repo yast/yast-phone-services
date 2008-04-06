@@ -4,6 +4,11 @@ Mon Mar 17 12:43:32 CET 2008 - jsrain@suse.cz
 - added 'StartupNotify=true' to the desktop file (bnc #304964)
 
 -------------------------------------------------------------------
+Thu Jun 21 17:40:01 CEST 2007 - adrian@suse.de
+
+- fix changelog entry order
+
+-------------------------------------------------------------------
 Fri May 25 13:30:04 CEST 2007 - jsrain@suse.cz
 
 - removed outdated translations from .desktop-files (#271209)
@@ -129,11 +134,6 @@ Thu Apr 24 11:08:28 CEST 2003 - jsuchome@suse.de
 - changed interface of function from Users module
 
 -------------------------------------------------------------------
-Mon Feb 10 18:24:00 CET 2003 - kkeil@suse.de
-
-- fix start of capisuite (#25500)
-
--------------------------------------------------------------------
 Fri Feb 28 12:01:45 CET 2003 - arvin@suse.de
 
 - new icons
@@ -150,6 +150,11 @@ Tue Feb 11 13:46:16 CET 2003 - kkeil@suse.de
 - create a kdeprintfax config if KDE was installed and no config
   exist
 - 2.7.3
+
+-------------------------------------------------------------------
+Mon Feb 10 18:24:00 CET 2003 - kkeil@suse.de
+
+- fix start of capisuite (#25500)
 
 -------------------------------------------------------------------
 Mon Feb 10 18:24:00 CET 2003 - kkeil@suse.de
@@ -198,4 +203,3 @@ Mon Jan  20 14:54:45 CET 2003 - kkeil@suse.de
 
 - first version
 
--------------------------------------------------------------------
