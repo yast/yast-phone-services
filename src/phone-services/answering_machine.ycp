@@ -120,12 +120,18 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 	    `VSpacing(1),
 	    `Frame(_("&User Table"), `VBox(
 		`Table(`id(`table), theader, []),
-		/* PushButton label */
-		`HBox(`PushButton(`id(`add), _("Ad&d")),
-		/* PushButton label */
-		`PushButton(`id(`edit), `opt(`disabled), _("&Edit")),
-		/* PushButton label */
-		`PushButton(`id(`delete), `opt(`disabled), _("De&lete"))))),
+		//http://en.opensuse.org/YaST/Style_Guide#Table_with_Buttons
+		`Left(
+		    /* PushButton label */
+		    `HBox(
+			`PushButton(`id(`add), _("Ad&d")),
+			/* PushButton label */
+			`PushButton(`id(`edit), `opt(`disabled), _("&Edit")),
+			/* PushButton label */
+			`PushButton(`id(`delete), `opt(`disabled), _("De&lete"))
+		    )
+		)
+	    )),
 	    `VSpacing(1),
 	    `VStretch()
 	),
