@@ -137,12 +137,15 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
 		/* Frame title */
 		`Frame(_("&User Table"), `VBox(
 		    `Table(`id(`table), theader, []),
+		    //http://en.opensuse.org/YaST/Style_Guide#Table_with_Buttons
+		    `Left(
 		    /* PushButton label */
-		    `HBox(`PushButton(`id(`add), _("Ad&d")),
+		      `HBox(`PushButton(`id(`add), _("Ad&d")),
 			/* PushButton label */
 			`PushButton(`id(`edit), `opt(`disabled), _("&Edit")),
 			/* PushButton label */
 			`PushButton(`id(`delete), `opt(`disabled), _("De&lete"))
+		      )
 		    )
 		)),
 		`VSpacing(1)
