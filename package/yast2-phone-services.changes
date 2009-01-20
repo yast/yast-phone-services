@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Jan 20 15:31:17 CET 2009 - mvidner@suse.cz
+
+- Style fixes: button labels and alignment in the main dialog, do
+  not ask for exit confirmation if nothing changed (bnc#398506,
+  bnc#398510, bnc#421031, bnc#421034, bnc#458320, bnc#458322).
+- 2.18.0
+
+-------------------------------------------------------------------
 Fri May 16 16:40:22 CEST 2008 - jsrain@suse.cz
 
 - added categories Settings and System into desktop file
