@@ -151,7 +151,7 @@ _("<p><b>Pin</b>: Identification code for the remote inquiry function.</p>");
 	/* abort? */
 	if(ret == `abort || ret == `cancel) {
 	    /* TODO: handle the changed dialog values */
-	    if(Popup::ReallyAbort(Answering_machine::modified)) break;
+	    if (!Answering_machine::modified || Popup::ReallyAbort(true)) break;
 	    else continue;
 	}
 	/* edit user settings */
