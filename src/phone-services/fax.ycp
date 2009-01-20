@@ -181,7 +181,7 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
 	/* abort? */
 	if(ret == `abort || ret == `cancel) {
 	    /* TODO: handle the changed dialog values */
-	    if(Popup::ReallyAbort(Fax::modified)) break;
+	    if(!Fax::modified || Popup::ReallyAbort(true)) break;
 	    else continue;
 	}
 	/* edit user settings */
