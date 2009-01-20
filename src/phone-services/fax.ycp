@@ -162,8 +162,12 @@ To disable the mails, set this to <tt>SaveOnly</tt>.</p>
 	`VSpacing(2)
     );
 
-    Wizard::SetContentsButtons(caption, contents, help,
-	Label::BackButton(), Label::FinishButton());
+    // style guide: OK, Cancel
+    // http://lists.opensuse.org/yast-devel/2009-01/msg00021.html
+    Wizard::SetContents(caption, contents, help, true, true);
+    Wizard::SetNextButton(`next, Label::OKButton());
+    Wizard::SetAbortButton(`abort, Label::CancelButton());
+    Wizard::HideBackButton();
 
     UI::ChangeWidget(`id(`table), `Items, table_items);
     UI::SetFocus(`id(`table));
