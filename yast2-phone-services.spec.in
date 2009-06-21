@@ -8,7 +8,8 @@ BuildArchitectures:     noarch
 Summary:	YaST2 - Phone Services Configuration
 
 %description
--
+This package contains YaST2 modules to configure additional phone
+services, for example fax and answering machines.
 
 @PREP@
 
