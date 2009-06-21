@@ -5,7 +5,7 @@ BuildRequires:	doxygen perl-XML-Writer update-desktop-files pkg-config yast2 yas
 Requires:       yast2 yast2-users
 BuildArchitectures:     noarch
 
-Summary:	Phone services configuration (answering machine and FAX)
+Summary:	YaST2 - Phone Services Configuration
 
 %description
 -
