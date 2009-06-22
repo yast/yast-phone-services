@@ -1,6 +1,7 @@
 @HEADER-COMMENT@
 
 @HEADER@
+License: GPL v2 or later
 BuildRequires:	doxygen perl-XML-Writer update-desktop-files pkg-config yast2 yast2-devtools yast2-users
 Requires:       yast2 yast2-users
 BuildArchitectures:     noarch
