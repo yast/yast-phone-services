@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sat Sep  5 06:08:51 CEST 2009 - mvidner@suse.cz
+
+- Added X-SuSE-YaST-Keywords for the Qt4 control center.
+- 2.18.2
+
+-------------------------------------------------------------------
 Fri Jun 19 10:42:36 CEST 2009 - mvidner@suse.cz
 
 - Using autodocs-ycp.ami, which contains a fix for automake 1.11.
