@@ -18,9 +18,8 @@ X-SuSE-YaST-AutoInstResource=
 X-SuSE-YaST-Keywords=ISDN,fax,facsimile
 
 Icon=yast-fax
-Exec=/sbin/yast2 fax 
+Exec=xdg-su -c "/sbin/yast2 fax"
 
 Name=Fax
 GenericName=Set up an ISDN fax device
-X-KDE-SubstituteUID=true
 StartupNotify=true

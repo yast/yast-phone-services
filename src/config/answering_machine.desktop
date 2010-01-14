@@ -18,9 +18,8 @@ X-SuSE-YaST-AutoInstResource=
 X-SuSE-YaST-Keywords=ISDN,phone,telephone,answering
 
 Icon=yast-answering_machine
-Exec=/sbin/yast2 answering_machine 
+Exec=xdg-su -c "/sbin/yast2 answering_machine"
 
 Name=Phone Answering Machine
 GenericName=Set up a phone answering machine
-X-KDE-SubstituteUID=true
 StartupNotify=true
