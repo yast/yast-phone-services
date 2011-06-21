@@ -326,7 +326,7 @@ define map Fax_UserEditDialog(string uname, map uconf) ``{
 
 		]),
 	    `VSpacing(1),
-	    `HBox(
+	    `ButtonBox(
 		`PushButton(`id(`ok), `opt(`default), Label::OKButton()),
 		`HSpacing(5),
 		`PushButton(`id(`cancel), Label::CancelButton())

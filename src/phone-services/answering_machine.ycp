@@ -299,7 +299,7 @@ define map AM_UserEditDialog(string uname, map uconf) ``{
 	    `TextEntry(`id(`pin), _("P&in"), uc["pin"]:"")
 	),
 	`HSpacing(1),
-	`HBox(
+	`ButtonBox(
 	    `PushButton(`id(`ok), `opt(`default), Label::OKButton()),
 	    `PushButton(`id(`cancel), Label::CancelButton())
 	)
