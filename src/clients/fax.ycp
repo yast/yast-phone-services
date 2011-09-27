@@ -34,7 +34,7 @@ define any FaxSequence () {
     Fax::Read();
 
     Wizard::CreateDialog();
-    Wizard::SetDesktopIcon("fax");
+    Wizard::SetDesktopTitleAndIcon("fax");
     Wizard::SetNextButton(`next, Label::FinishButton() );
 
     /* main ui function */
