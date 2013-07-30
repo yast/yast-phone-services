@@ -9,6 +9,8 @@ Requires:       yast2 > 2.21.22
 Requires:       yast2-users
 BuildArchitectures:     noarch
 
+Requires:       yast2-ruby-bindings >= 1.0.0
+
 Summary:	YaST2 - Phone Services Configuration
 
 %description
@@ -27,8 +29,8 @@ services, for example fax and answering machines.
 %defattr(-,root,root)
 %dir @yncludedir@/phone-services
 @yncludedir@/phone-services/*
-@clientdir@/*.ycp
-@moduledir@/*.y*
+@clientdir@/*.rb
+@moduledir@/*.rb
 @desktopdir@/*.desktop
 @scrconfdir@/*.scr
 %doc @docdir@
